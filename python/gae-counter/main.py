@@ -15,26 +15,33 @@
 # limitations under the License.
 #
 
-
-
-
+import os
 import wsgiref.handlers
-
-
+from google.appengine.api import users
 from google.appengine.ext import webapp
+from google.appengine.ext.webapp import template
 
 
 class MainHandler(webapp.RequestHandler):
-
-  def get(self):
-    self.response.out.write('Hello world!')
+    def get(self):
+        user = users.get_current_user()
+        if user:
+            user_url = users.create_logout_url(self.request.uri)
+        else:
+            user_url = users.create_login_url(self.request.uri)
+        template_values = {
+            'user'     : user,
+            'user_url' : user_url,
+            }
+        path = os.path.join(os.path.dirname(__file__), 'templates', 'index.html')
+        self.response.out.write(template.render(path, template_values))
 
 
 def main():
-  application = webapp.WSGIApplication([('/', MainHandler)],
-                                       debug=True)
-  wsgiref.handlers.CGIHandler().run(application)
+    application = webapp.WSGIApplication([('/', MainHandler)],
+                                         debug=True)
+    wsgiref.handlers.CGIHandler().run(application)
 
 
 if __name__ == '__main__':
-  main()
+    main()
