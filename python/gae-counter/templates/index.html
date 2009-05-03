@@ -1,1 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %}{% block content %}{% if user %}
+<form method="POST" action="/create">
+  <input type="submit" value="新しいカウンターを作成する" />
+</form>{% else %}
+<h3>説明</h3>
+GAEで動くアクセスカウンターです。<br />
+Googleアカウントでログインすると使えます。{% endif %}{% endblock %}

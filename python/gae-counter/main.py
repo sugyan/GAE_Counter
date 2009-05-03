@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #
 # Copyright 2007 Google Inc.
 #
@@ -20,6 +21,7 @@ import wsgiref.handlers
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
+from counter.create import CreateHandler
 
 
 class MainHandler(webapp.RequestHandler):
@@ -38,8 +40,10 @@ class MainHandler(webapp.RequestHandler):
 
 
 def main():
-    application = webapp.WSGIApplication([('/', MainHandler)],
-                                         debug=True)
+    application = webapp.WSGIApplication([
+            ('/',       MainHandler),
+            ('/create', CreateHandler),
+            ], debug=True)
     wsgiref.handlers.CGIHandler().run(application)
 
 
