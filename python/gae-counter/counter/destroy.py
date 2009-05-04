@@ -10,6 +10,7 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import login_required
 from models.counter import Counter
+from models.image import NumberImage
 
 
 class DestroyHandler(webapp.RequestHandler):
@@ -23,7 +24,7 @@ class DestroyHandler(webapp.RequestHandler):
             if counter == None or user != counter.user:
                 self.display_error(403)
                 return
-            counter.delete()
+            db.run_in_transaction(self.destroy_counter, counter.key())
             self.redirect('/')
         except BadKeyError, error:
             logging.error(str(error))
@@ -37,3 +38,9 @@ class DestroyHandler(webapp.RequestHandler):
             }
         path = os.path.join(os.path.dirname(__file__), os.pardir, 'templates', 'error.html')
         self.response.out.write(template.render(path, template_values))
+
+    def destroy_counter(self, key):
+        counter = Counter.get(key)
+        for image in counter.image:
+            NumberImage.get(image).delete()
+        counter.delete()

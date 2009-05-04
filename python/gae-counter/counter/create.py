@@ -5,9 +5,11 @@ import cgi
 import logging
 import os
 from google.appengine.api import users
+from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from models.counter import Counter
+from models.image import NumberImage
 
 
 class CreateHandler(webapp.RequestHandler):
@@ -29,7 +31,16 @@ class CreateHandler(webapp.RequestHandler):
         name = cgi.escape(self.request.get('name')[:100])
         if name == '':
             name = 'No name'
+        # transactionを使うべきなのか？
         counter = Counter(name = name)
-        key = counter.put()
-        logging.debug("key: " + str(key))
+        counter_key = counter.put()
+        for i in range(10):
+            number = NumberImage(
+                parent = counter_key,
+                number = i,
+                )
+            key = number.put()
+            counter.image.append(key)
+        counter.put()
+        
         self.redirect('/')
