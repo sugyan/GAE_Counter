@@ -7,4 +7,4 @@ from google.appengine.ext import db
 class NumberImage(db.Model):
     user   = db.UserProperty(auto_current_user_add = True)
     number = db.IntegerProperty()
-    data   = db.Blob()
+    data   = db.BlobProperty()

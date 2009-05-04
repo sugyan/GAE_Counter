@@ -9,6 +9,7 @@ from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import login_required
+from common import responses
 from models.counter import Counter
 from models.image import NumberImage
 
@@ -22,7 +23,7 @@ class DestroyHandler(webapp.RequestHandler):
         """
         GETは404とする
         """
-        self.display_error(404)
+        responses.display_error(self, 404)
 
     def post(self):
         """
@@ -33,7 +34,7 @@ class DestroyHandler(webapp.RequestHandler):
             counter = Counter.get(db.Key(encoded = self.request.get('key')))
             # 現在のユーザーと関連づけられていなければ403エラー
             if counter == None or counter.user != users.get_current_user():
-                self.display_error(403)
+                responses.display_error(self, 403)
                 return
             # transactionで関連画像とともに一括削除
             # transaction使う必要ない？
@@ -42,19 +43,7 @@ class DestroyHandler(webapp.RequestHandler):
         # requestのkeyが正しくない場合
         except BadKeyError, error:
             logging.error(str(error))
-            self.display_error(400)
-
-    def display_error(self, code):
-        """
-        エラーコードに対応したエラー画面を出力
-        """
-        self.error(code)
-        template_values = {
-            'status_code' : code,
-            'message'     : webapp.Response.http_status_message(code)
-            }
-        path = os.path.join(os.path.dirname(__file__), os.pardir, 'templates', 'error.html')
-        self.response.out.write(template.render(path, template_values))
+            responses.display_error(self, 400)
 
     def destroy_counter(self, key):
         """

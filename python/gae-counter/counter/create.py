@@ -8,6 +8,7 @@ from google.appengine.api import users
 from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
+from common import responses
 from models.counter import Counter
 from models.image import NumberImage
 
@@ -21,14 +22,7 @@ class CreateHandler(webapp.RequestHandler):
         """
         GETは404とする
         """
-        code = 404
-        self.error(code)
-        template_values = {
-            'status_code' : code,
-            'message'     : webapp.Response.http_status_message(code)
-            }
-        path = os.path.join(os.path.dirname(__file__), os.pardir, 'templates', 'error.html')
-        self.response.out.write(template.render(path, template_values))
+        responses.display_error(self, 404)
 
     def post(self):
         # ログインしているユーザーのみ作成可能
@@ -46,9 +40,11 @@ class CreateHandler(webapp.RequestHandler):
         counter_key = counter.put()
         # デフォルトの画像を用意する
         for i in range(10):
+            path = os.path.join(os.path.dirname(__file__), os.pardir, 'images', str(i) + '.png')
             number = NumberImage(
                 parent = counter_key,
                 number = i,
+                data   = open(path).read(),
                 )
             key = number.put()
             # 削除するときに参照できるようListで保持させる

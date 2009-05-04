@@ -18,4 +18,13 @@
   <input type="hidden" name="key" value="{{ counter.key }}" />
   <input type="submit" value="削除する" onclick="javascript:return confirm('本当に削除しますか？')?true:false"/>
 </form>
+<hr />
+<table>
+  <tr>{% for i in loop %}
+    <th>{{ i }}</th>{% endfor %}
+  </tr>
+  <tr>{% for i in loop %}
+    <td><img src="/view?num={{ i }}&key={{ counter.key }}"></td>{% endfor %}
+  </tr>
+</table>
 {% endblock %}

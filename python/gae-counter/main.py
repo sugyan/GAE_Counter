@@ -22,10 +22,12 @@ import wsgiref.handlers
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
+from common import responses
 from common import templatefilters
 from counter.config import ConfigHandler
 from counter.create import CreateHandler
 from counter.destroy import DestroyHandler
+from counter.viewer import ViewHandler
 from models.counter import Counter
 
 
@@ -41,7 +43,7 @@ class MainHandler(webapp.RequestHandler):
         user = users.get_current_user()
         if user:
             user_url = users.create_logout_url(self.request.uri)
-            counters = Counter.all().filter('user =', user)
+            counters = Counter.all().filter('user = ', user)
             counter  = {
                 'counters': counters,
                 'can_create': True if counters.count() < 3 else False,
@@ -63,14 +65,7 @@ class NotFoundHandler(webapp.RequestHandler):
     処理すべきURL以外のものは404とする
     """
     def get(self):
-        code = 404
-        self.error(code)
-        template_values = {
-            'status_code' : code,
-            'message'     : webapp.Response.http_status_message(code)
-            }
-        path = os.path.join(os.path.dirname(__file__), 'templates', 'error.html')
-        self.response.out.write(template.render(path, template_values))
+        responses.display_error(self, 404)
         
 
 def main():
@@ -82,6 +77,7 @@ def main():
             ('/create',  CreateHandler),
             ('/destroy', DestroyHandler),
             ('/config',  ConfigHandler),
+            ('/view',    ViewHandler),
             ('/.*',      NotFoundHandler)
             ], debug=True)
     wsgiref.handlers.CGIHandler().run(application)
