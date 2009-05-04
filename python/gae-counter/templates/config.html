@@ -11,7 +11,10 @@
   </tr>
   <tr>
     <td align="right">URL：</td>
-    <td>http://gae-counter.appspot.com/counter/{{ counter.key }}.png</td>
+    <td>
+      <a href="/counter/{{ counter.key }}.png">http://gae-counter.appspot.com/counter/{{ counter.key }}.png</a><br />
+      <a href="/counter/{{ counter.key }}.jpg">http://gae-counter.appspot.com/counter/{{ counter.key }}.jpg</a><br />
+    </td>
   </tr>
 </table>
 <form method="POST" action="/destroy">

@@ -24,6 +24,7 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from common import responses
 from common import templatefilters
+from counter.counter import CounterHandler
 from counter.config import ConfigHandler
 from counter.create import CreateHandler
 from counter.destroy import DestroyHandler
@@ -72,13 +73,15 @@ def main():
     logging.getLogger().setLevel(logging.DEBUG)
     # カスタムフィルタの追加
     webapp.template.register_template_library('common.templatefilters')
+    # RequestHandlerをまとめて指定
     application = webapp.WSGIApplication([
-            ('/',        MainHandler),
-            ('/create',  CreateHandler),
-            ('/destroy', DestroyHandler),
-            ('/config',  ConfigHandler),
-            ('/view',    ViewHandler),
-            ('/.*',      NotFoundHandler)
+            ('/',           MainHandler),
+            ('/counter/.*', CounterHandler),
+            ('/create',     CreateHandler),
+            ('/destroy',    DestroyHandler),
+            ('/config',     ConfigHandler),
+            ('/view',       ViewHandler),
+            ('/.*',         NotFoundHandler)
             ], debug=True)
     wsgiref.handlers.CGIHandler().run(application)
 
