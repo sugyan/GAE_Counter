@@ -1,12 +1,20 @@
-{% extends 'base.html' %}{% block content %}
+{% extends 'base.html' %}{% block header %}
+<link href="/css/style.css" rel="stylesheet" type="text/css" />{% endblock %}{% block content %}
 <h2>{{ counter.name }}</h2>
-<table>{% for record in records %}
+<table>
   <tr>
-    <td>{{ record.count }}</td>
-    <td>{{ record.datetime|timeJST }}</td>
-    <td>{{ record.remote_addr }}</td>
-    <td>{{ record.user_agent }}</td>
-    <td>{{ record.referer }}</td>
+    <th>Count</th>
+    <th>Date Time</th>
+    <th>IP Address</th>
+    <th>User Agent</th>
+    <th>Referer</th>
+  </tr>
+  <tr>{% for record in records %}
+    <td align="right">{{ record.count }}</td>
+    <td align="left">{{ record.datetime|timeJST|date:"Y-m-d H:i:s O" }}</td>
+    <td align="right">{{ record.remote_addr }}</td>
+    <td align="left">{{ record.user_agent|slice:":40" }}</td>
+    <td align="left">{{ record.referer|urlizetrunc:"40" }}</td>
   </tr>{% endfor %}
 </table>
 {% endblock %}

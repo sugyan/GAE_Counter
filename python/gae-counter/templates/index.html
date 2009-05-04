@@ -1,10 +1,12 @@
-{% extends 'base.html' %}{% block content %}{% if user %}
+{% extends 'base.html' %}{% block content %}{% block header %}
+<link href="/css/style.css" rel="stylesheet" type="text/css" />{% endblock %}{% if user %}
 カウンターは３つまで作れます
 <table>
   <tr>
     <th>カウンター名</th>
     <th>作成日</th>
     <th>アクセス数</th>
+    <th colspan="2"></th>
   </tr>{% for counter in counter.counters %}
   <tr>
     <td>{{ counter.name }}</td>
@@ -23,8 +25,12 @@
 <h1>GAE Counter</h1>
 <img src="http://gae-counter.appspot.com/counter/agtnYWUtY291bnRlcnIOCxIHQ291bnRlchjUDww.png">
 <h2>説明</h2>
-GAEで動くアクセスカウンターです。<br />
-Googleアカウントで<a href="{{ user_url }}">ログイン</a>すると使えます。
+<ul>
+  <li>Google App Engineで動くアクセスカウンターです。</li>
+  <li>アクセスされるたびに数字が増加する画像データを提供します。</li>
+  <li>アクセス記録を取って簡単なアクセス解析もできます。</li>
+  <li>Googleアカウントで<a href="{{ user_url }}">ログイン</a>すると使えます。</li>
+</ul>
 <h3>ソース</h3>
 GitHubで公開しています。<br />
 <a href="http://github.com/sugyan/GAE_Counter/tree/master">

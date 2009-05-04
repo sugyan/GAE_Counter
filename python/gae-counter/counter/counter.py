@@ -28,7 +28,6 @@ class CounterHandler(webapp.RequestHandler):
             if not counter:
                 responses.display_error(self, 404)
                 return
-            logging.debug(counter.count)
             # アクセス履歴情報の取得
             record = {
                 'referer'     : self.request.headers.get('Referer'),
@@ -38,6 +37,7 @@ class CounterHandler(webapp.RequestHandler):
             # カウントのインクリメント
             result = db.run_in_transaction(self.increment_count, counter.key(), record)
             count = Counter.get(result).count
+            logging.debug(count)
             # 新しいカウントを桁毎に区切る
             digits = []
             while count / 10 != 0:
@@ -47,7 +47,6 @@ class CounterHandler(webapp.RequestHandler):
             # 使用する画像データの読み込み
             image_data = {}
             for number_image in NumberImage.all().ancestor(key).filter('number in', digits):
-                logging.debug(number_image.number)
                 image_data[number_image.number] = number_image.data
             # 合成するデータの決定
             image_list = []

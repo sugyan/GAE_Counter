@@ -33,7 +33,7 @@ class RecordHandler(webapp.RequestHandler):
                 'user'     : user,
                 'user_url' : users.create_logout_url('/'),
                 'counter'  : counter,
-                'records'  : AccessRecord.all().ancestor(counter),
+                'records'  : AccessRecord.all().ancestor(counter).order('-count'),
                 }
             path = os.path.join(os.path.dirname(__file__), os.pardir, 'templates', 'record.html')
             self.response.out.write(template.render(path, template_values))

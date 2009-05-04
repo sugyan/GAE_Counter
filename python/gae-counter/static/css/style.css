@@ -1,0 +1,34 @@
+table {
+    margin-top: 0.2em;
+    margin-bottom: 1em;
+    width: 570px;
+    border-collapse: separate;
+    border-spacing: 2px;
+    font-size: 100%;
+}
+
+table caption {
+    margin-top: 1em;
+    text-align: right;
+}
+
+table th,
+table td {
+    padding: 4px 6px;
+}
+
+table th {
+    border-bottom: solid 1px #B2B2B2;
+    border-right: solid 1px #B2B2B2;
+    background: #FFD9F3;
+    text-align: center;
+    white-space: nowrap;
+    font-size: 92%;
+}
+
+table td {
+    border-bottom: solid 1px #B2B2B2;
+    border-right: solid 1px #B2B2B2;
+    background: #F3F3F3;
+    white-space: nowrap;
+}
