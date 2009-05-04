@@ -35,10 +35,10 @@ class CounterHandler(webapp.RequestHandler):
                 count /= 10
             digits.append(count)
             # 使用する画像データの読み込み
-            # 毎回全部読むのは無駄か？
             image_data = {}
-            for image in NumberImage.all().ancestor(key):
-                image_data[image.number] = image.data
+            for number_image in NumberImage.all().ancestor(key).filter('number in', digits):
+                logging.debug(number_image.number)
+                image_data[number_image.number] = number_image.data
             # 合成するデータの決定
             image_list = []
             offset = 0
