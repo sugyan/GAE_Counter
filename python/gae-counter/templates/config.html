@@ -1,0 +1,4 @@
+{% extends 'base.html' %}{% block content %}
+<h2>{{ counter.name }}</h2>
+<p>作成日時：{{ counter.date|timeJST|date:"Y-m-d H:i:s" }}</p>
+{% endblock %}

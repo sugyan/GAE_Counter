@@ -16,12 +16,16 @@
 # limitations under the License.
 #
 
+import logging
 import os
 import wsgiref.handlers
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
+from common import templatefilters
+from counter.config import ConfigHandler
 from counter.create import CreateHandler
+from models.counter import Counter
 
 
 class MainHandler(webapp.RequestHandler):
@@ -29,20 +33,43 @@ class MainHandler(webapp.RequestHandler):
         user = users.get_current_user()
         if user:
             user_url = users.create_logout_url(self.request.uri)
+            counters = Counter.all().filter('user = ', user)
+            counter  = {
+                'counters': counters,
+                'can_create': True if counters.count() < 3 else False,
+                }
         else:
             user_url = users.create_login_url(self.request.uri)
+            counter  = None
         template_values = {
+            'counter'  : counter,
             'user'     : user,
             'user_url' : user_url,
             }
         path = os.path.join(os.path.dirname(__file__), 'templates', 'index.html')
         self.response.out.write(template.render(path, template_values))
 
+        
+class NotFoundHandler(webapp.RequestHandler):
+    def get(self):
+        code = 404
+        self.error(code)
+        template_values = {
+            'status_code' : code,
+            'message'     : webapp.Response.http_status_message(code)
+            }
+        path = os.path.join(os.path.dirname(__file__), 'templates', 'error.html')
+        self.response.out.write(template.render(path, template_values))
+        
 
 def main():
+    logging.getLogger().setLevel(logging.DEBUG)
+    webapp.template.register_template_library('common.templatefilters')
     application = webapp.WSGIApplication([
             ('/',       MainHandler),
             ('/create', CreateHandler),
+            ('/config', ConfigHandler),
+            ('/.*', NotFoundHandler)
             ], debug=True)
     wsgiref.handlers.CGIHandler().run(application)
 

@@ -1,7 +1,25 @@
 {% extends 'base.html' %}{% block content %}{% if user %}
+カウンターは３つまで作れます
+<table>
+  <tr>
+    <th>カウンター名</th>
+    <th>作成日</th>
+    <th>アクセス数</th>
+  </tr>{% for counter in counter.counters %}
+  <tr>
+    <td>{{ counter.name }}</td>
+    <td>{{ counter.date|timeJST|date:"Y-m-d" }}</td>
+    <td align="right">{{ counter.count }}</td>
+    <td><a href="/config?key={{ counter.key }}">設定</a></td>
+    <td>アクセス履歴</td>
+  </tr>{% endfor %}
+</table>{% if counter.can_create %}
+<hr />
+<h3>新規作成</h3>
 <form method="POST" action="/create">
-  <input type="submit" value="新しいカウンターを作成する" />
-</form>{% else %}
+  カウンター名：<input name="name" />
+  <input type="submit" value="作成する" />
+</form>{% endif %}{% else %}
 <h3>説明</h3>
 GAEで動くアクセスカウンターです。<br />
 Googleアカウントでログインすると使えます。{% endif %}{% endblock %}
