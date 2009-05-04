@@ -3,14 +3,23 @@
 
 import cgi
 import logging
+import os
 from google.appengine.api import users
 from google.appengine.ext import webapp
+from google.appengine.ext.webapp import template
 from models.counter import Counter
 
 
 class CreateHandler(webapp.RequestHandler):
     def get(self):
-        pass
+        code = 404
+        self.error(code)
+        template_values = {
+            'status_code' : code,
+            'message'     : webapp.Response.http_status_message(code)
+            }
+        path = os.path.join(os.path.dirname(__file__), os.pardir, 'templates', 'error.html')
+        self.response.out.write(template.render(path, template_values))
 
     def post(self):
         if not users.get_current_user():

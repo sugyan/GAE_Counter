@@ -25,6 +25,7 @@ from google.appengine.ext.webapp import template
 from common import templatefilters
 from counter.config import ConfigHandler
 from counter.create import CreateHandler
+from counter.destroy import DestroyHandler
 from models.counter import Counter
 
 
@@ -66,10 +67,11 @@ def main():
     logging.getLogger().setLevel(logging.DEBUG)
     webapp.template.register_template_library('common.templatefilters')
     application = webapp.WSGIApplication([
-            ('/',       MainHandler),
-            ('/create', CreateHandler),
-            ('/config', ConfigHandler),
-            ('/.*', NotFoundHandler)
+            ('/',        MainHandler),
+            ('/create',  CreateHandler),
+            ('/destroy', DestroyHandler),
+            ('/config',  ConfigHandler),
+            ('/.*',      NotFoundHandler)
             ], debug=True)
     wsgiref.handlers.CGIHandler().run(application)
 

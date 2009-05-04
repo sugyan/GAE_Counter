@@ -12,22 +12,19 @@ from google.appengine.ext.webapp.util import login_required
 from models.counter import Counter
 
 
-class ConfigHandler(webapp.RequestHandler):
-    @login_required
+class DestroyHandler(webapp.RequestHandler):
     def get(self):
+        self.display_error(404)
+
+    def post(self):
         try:
             user = users.get_current_user()
             counter = Counter.get(db.Key(encoded = self.request.get('key')))
             if counter == None or user != counter.user:
                 self.display_error(403)
                 return
-            template_values = {
-                'user'     : user,
-                'user_url' : users.create_logout_url('/'),
-                'counter'  : counter,
-                }
-            path = os.path.join(os.path.dirname(__file__), os.pardir, 'templates', 'config.html')
-            self.response.out.write(template.render(path, template_values))
+            counter.delete()
+            self.redirect('/')
         except BadKeyError, error:
             logging.error(str(error))
             self.display_error(400)

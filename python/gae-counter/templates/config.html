@@ -1,4 +1,21 @@
 {% extends 'base.html' %}{% block content %}
 <h2>{{ counter.name }}</h2>
-<p>作成日時：{{ counter.date|timeJST|date:"Y-m-d H:i:s" }}</p>
+<table>
+  <tr>
+    <td align="right">作成日時：</td>
+    <td>{{ counter.date|timeJST|date:"Y-m-d H:i:s" }}</td>
+  </tr>
+  <tr>
+    <td align="right">アクセス数：</td>
+    <td>{{ counter.count }}</td>
+  </tr>
+  <tr>
+    <td align="right">URL：</td>
+    <td>http://gae-counter.appspot.com/counter/{{ counter.key }}.png</td>
+  </tr>
+</table>
+<form method="POST" action="/destroy">
+  <input type="hidden" name="key" value="{{ counter.key }}" />
+  <input type="submit" value="削除する" onclick="javascript:return confirm('本当に削除しますか？')?true:false"/>
+</form>
 {% endblock %}
