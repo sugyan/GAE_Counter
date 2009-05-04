@@ -30,11 +30,18 @@ from models.counter import Counter
 
 
 class MainHandler(webapp.RequestHandler):
+    """
+    ホーム画面の処理
+    """
     def get(self):
+        """
+        ログインしていればユーザーの管理画面へ、
+        ログインしていなければトップ画面へ
+        """
         user = users.get_current_user()
         if user:
             user_url = users.create_logout_url(self.request.uri)
-            counters = Counter.all().filter('user = ', user)
+            counters = Counter.all().filter('user =', user)
             counter  = {
                 'counters': counters,
                 'can_create': True if counters.count() < 3 else False,
@@ -52,6 +59,9 @@ class MainHandler(webapp.RequestHandler):
 
         
 class NotFoundHandler(webapp.RequestHandler):
+    """
+    処理すべきURL以外のものは404とする
+    """
     def get(self):
         code = 404
         self.error(code)
@@ -65,6 +75,7 @@ class NotFoundHandler(webapp.RequestHandler):
 
 def main():
     logging.getLogger().setLevel(logging.DEBUG)
+    # カスタムフィルタの追加
     webapp.template.register_template_library('common.templatefilters')
     application = webapp.WSGIApplication([
             ('/',        MainHandler),

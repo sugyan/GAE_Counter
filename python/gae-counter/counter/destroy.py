@@ -14,23 +14,40 @@ from models.image import NumberImage
 
 
 class DestroyHandler(webapp.RequestHandler):
+    """
+    カウンターを削除する
+    """
+
     def get(self):
+        """
+        GETは404とする
+        """
         self.display_error(404)
 
     def post(self):
+        """
+        requestからkeyを受け取り、対応するCounterのentityを削除する
+        """
         try:
-            user = users.get_current_user()
+            # 削除する対象を取得
             counter = Counter.get(db.Key(encoded = self.request.get('key')))
-            if counter == None or user != counter.user:
+            # 現在のユーザーと関連づけられていなければ403エラー
+            if counter == None or counter.user != users.get_current_user():
                 self.display_error(403)
                 return
+            # transactionで関連画像とともに一括削除
+            # transaction使う必要ない？
             db.run_in_transaction(self.destroy_counter, counter.key())
             self.redirect('/')
+        # requestのkeyが正しくない場合
         except BadKeyError, error:
             logging.error(str(error))
             self.display_error(400)
 
     def display_error(self, code):
+        """
+        エラーコードに対応したエラー画面を出力
+        """
         self.error(code)
         template_values = {
             'status_code' : code,
@@ -40,7 +57,11 @@ class DestroyHandler(webapp.RequestHandler):
         self.response.out.write(template.render(path, template_values))
 
     def destroy_counter(self, key):
+        """
+        指定されたkeyのentityを削除する
+        """
         counter = Counter.get(key)
+        # entityが持つ画像データもすべて削除する
         for image in counter.image:
             NumberImage.get(image).delete()
         counter.delete()
