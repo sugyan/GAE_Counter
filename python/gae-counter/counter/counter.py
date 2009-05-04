@@ -9,6 +9,7 @@ from google.appengine.ext import webapp
 from common import responses
 from models.counter import Counter
 from models.image import NumberImage
+from models.record import AccessRecord
 
 
 class CounterHandler(webapp.RequestHandler):
@@ -24,9 +25,18 @@ class CounterHandler(webapp.RequestHandler):
             output_encoding = [images.PNG, images.JPEG][['png', 'jpg'].index(type)]
             # カウンターの取得
             counter = Counter.get(key)
+            if not counter:
+                responses.display_error(self, 404)
+                return
             logging.debug(counter.count)
+            # アクセス履歴情報の取得
+            record = {
+                'referer'     : self.request.headers.get('Referer'),
+                'user_agent'  : self.request.headers.get('User-Agent'),
+                'remote_addr' : self.request.remote_addr,
+                }
             # カウントのインクリメント
-            result = db.run_in_transaction(self.increment_count, counter.key())
+            result = db.run_in_transaction(self.increment_count, counter.key(), record)
             count = Counter.get(result).count
             # 新しいカウントを桁毎に区切る
             digits = []
@@ -59,10 +69,18 @@ class CounterHandler(webapp.RequestHandler):
             logging.error(str(error))
             responses.display_error(self, 404)
 
-    def increment_count(self, key):
+    def increment_count(self, key, record):
         """
         transactionでアクセスカウントを増やす
         """
         counter = Counter.get(key)
         counter.count += 1
+        access_record = AccessRecord(
+            parent      = counter,
+            count       = counter.count,
+            referer     = record['referer'],
+            user_agent  = record['user_agent'],
+            remote_addr = record['remote_addr'],
+            )
+        access_record.put()
         return counter.put()

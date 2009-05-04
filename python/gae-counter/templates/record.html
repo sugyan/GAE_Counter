@@ -1,0 +1,12 @@
+{% extends 'base.html' %}{% block content %}
+<h2>{{ counter.name }}</h2>
+<table>{% for record in records %}
+  <tr>
+    <td>{{ record.count }}</td>
+    <td>{{ record.datetime|timeJST }}</td>
+    <td>{{ record.remote_addr }}</td>
+    <td>{{ record.user_agent }}</td>
+    <td>{{ record.referer }}</td>
+  </tr>{% endfor %}
+</table>
+{% endblock %}

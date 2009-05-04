@@ -28,6 +28,7 @@ from counter.counter import CounterHandler
 from counter.config import ConfigHandler
 from counter.create import CreateHandler
 from counter.destroy import DestroyHandler
+from counter.record import RecordHandler
 from counter.viewer import ViewHandler
 from models.counter import Counter
 
@@ -80,6 +81,7 @@ def main():
             ('/create',     CreateHandler),
             ('/destroy',    DestroyHandler),
             ('/config',     ConfigHandler),
+            ('/record',     RecordHandler),
             ('/view',       ViewHandler),
             ('/.*',         NotFoundHandler)
             ], debug=True)

@@ -11,7 +11,7 @@
     <td>{{ counter.date|timeJST|date:"Y-m-d" }}</td>
     <td align="right">{{ counter.count }}</td>
     <td><a href="/config?key={{ counter.key }}">設定</a></td>
-    <td>履歴</td>
+    <td><a href="/record?key={{ counter.key }}">記録</a></td>
   </tr>{% endfor %}
 </table>{% if counter.can_create %}
 <hr />
@@ -21,12 +21,12 @@
   <input type="submit" value="作成する" />
 </form>{% endif %}{% else %}
 <h1>GAE Counter</h1>
-<img src="http://gae-counter.appspot.com/counter/agtnYWUtY291bnRlcnIOCxIHQ291bnRlchi5Fww.png">
+<img src="http://gae-counter.appspot.com/counter/agtnYWUtY291bnRlcnIOCxIHQ291bnRlchjUDww.png">
 <h2>説明</h2>
 GAEで動くアクセスカウンターです。<br />
 Googleアカウントで<a href="{{ user_url }}">ログイン</a>すると使えます。
 <h3>ソース</h3>
-githubで公開しています。<br />
+GitHubで公開しています。<br />
 <a href="http://github.com/sugyan/GAE_Counter/tree/master">
   http://github.com/sugyan/GAE_Counter/tree/master
 </a>
