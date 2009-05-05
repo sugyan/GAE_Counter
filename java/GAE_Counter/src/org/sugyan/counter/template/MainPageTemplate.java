@@ -13,6 +13,15 @@ import org.sugyan.counter.model.Counter;
  */
 public class MainPageTemplate extends BaseTemplate {
 
+    /* (non-Javadoc)
+     * @see org.sugyan.counter.template.BaseTemplate#header()
+     */
+    @Override
+    protected String header() {
+        // TODO Auto-generated method stub
+        return "<link href=\"/css/style.css\" rel=\"stylesheet\" type=\"text/css\" />";
+    }
+
     private List<Counter> counters = null;
     
     /* (non-Javadoc)

@@ -22,7 +22,7 @@
 	
 	<servlet-mapping>
 		<servlet-name>MainPage</servlet-name>
-		<url-pattern>/</url-pattern>
+		<url-pattern>/main</url-pattern>
 	</servlet-mapping><servlet-mapping>
 		<servlet-name>Create</servlet-name>
 		<url-pattern>/create</url-pattern>

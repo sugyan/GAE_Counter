@@ -37,7 +37,7 @@ public class CreateServlet extends HttpServlet {
         UserService userService = UserServiceFactory.getUserService();
         if (!userService.isUserLoggedIn()) {
             LOG.severe("not signed in user");
-            resp.sendRedirect("/");
+            resp.sendRedirect("/main");
             return;
         }
         // request parameterからカウンター名を受け取る
@@ -62,7 +62,7 @@ public class CreateServlet extends HttpServlet {
         }
         LOG.info(counter.getUser().toString());
         
-        resp.sendRedirect("/");
+        resp.sendRedirect("/main");
     }
     
 }

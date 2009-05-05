@@ -40,7 +40,7 @@ public class DestroyServlet extends HttpServlet {
         UserService userService = UserServiceFactory.getUserService();
         if (!userService.isUserLoggedIn()) {
             LOG.severe("not signed in user");
-            resp.sendRedirect("/");
+            resp.sendRedirect("/main");
             return;
         }
         
@@ -78,7 +78,7 @@ public class DestroyServlet extends HttpServlet {
             pm.close();
         }
         
-        resp.sendRedirect("/");
+        resp.sendRedirect("/main");
     }
 
 }
