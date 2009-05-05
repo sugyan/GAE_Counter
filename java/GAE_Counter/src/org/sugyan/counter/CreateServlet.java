@@ -4,6 +4,7 @@
 package org.sugyan.counter;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.sugyan.counter.model.Counter;
 
+import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 /**
@@ -31,24 +33,36 @@ public class CreateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         // TODO Auto-generated method stub
-        if (!UserServiceFactory.getUserService().isUserLoggedIn()) {
+        // 必ずログイン済みであること
+        UserService userService = UserServiceFactory.getUserService();
+        if (!userService.isUserLoggedIn()) {
             LOG.severe("not signed in user");
             resp.sendRedirect("/");
             return;
         }
+        // request parameterからカウンター名を受け取る
         String name = req.getParameter("name");
         if (name == null || name.equals("")) {
             name = "No name";
         }
         
-        Counter counter = new Counter(name);
+        // entityの生成
+        Counter counter = new Counter();
+        counter.setName(name);
+        counter.setUser(userService.getCurrentUser());
+        counter.setDate(new Date());
+        counter.setCount(0);
         PersistenceManager pm = PMF.get().getPersistenceManager();
         try {
             pm.makePersistent(counter);
+        } catch (Exception e) {
+            LOG.severe(e.toString());
         } finally{
             pm.close();
         }
+        LOG.info(counter.getUser().toString());
         
+        resp.sendRedirect("/");
     }
     
 }

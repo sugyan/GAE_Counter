@@ -3,7 +3,6 @@
  */
 package org.sugyan.counter.template;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.sugyan.counter.model.Counter;
@@ -32,13 +31,13 @@ public class MainPageTemplate extends BaseTemplate {
                    "    <th colspan=\"2\"></th>\n" +
                    "  </tr>\n" +
                    counterList() +
-                   "</table>\n" + /*{% if counter.can_create %}*/
+                   "</table>\n" + ( counters.size() < 3 ?
                    "<hr />\n" +
                    "<h3>新規作成</h3>\n" +
                    "<form method=\"POST\" action=\"/create\">\n" +
                    "  カウンター名：<input name=\"name\" />\n" +
                    "  <input type=\"submit\" value=\"作成する\" />\n" +
-                   "</form>\n";   
+                   "</form>\n" : "");   
         } else {
             return "<h1>GAE Counter</h1>\n" +
 //                   "<img src=\"http://gae-counter.appspot.com/counter/agtnYWUtY291bnRlcnIOCxIHQ291bnRlchjUDww.png\">\n" +
@@ -67,14 +66,12 @@ public class MainPageTemplate extends BaseTemplate {
         }
         
         StringBuilder stringBuilder = new StringBuilder();
-        Iterator<Counter> iterator = counters.iterator();
-        while (iterator.hasNext()) {
-            Counter counter = iterator.next();
+        for (Counter counter : counters) {
             stringBuilder.append(
                     "  <tr>\n" +
                     "    <td>" + counter.getName() + "</td>\n" +
-                    "    <td>" + /*{{ counter.date|timeJST|date:"Y-m-d" }}*/ "</td>\n" +
-                    "    <td align=\"right\">" + /*{{ counter.count }}*/ "</td>\n" +
+                    "    <td>" + counter.getDate() + "</td>\n" +
+                    "    <td align=\"right\">" + counter.getCount() + "</td>\n" +
                     "    <td><a href=\"/config?key=" + counter.getEncodedKey() + "\">設定</a></td>\n" +
                     "    <td><a href=\"/record?key=" + counter.getEncodedKey() + "\">記録</a></td>\n" +
                     "  </tr>\n"); 

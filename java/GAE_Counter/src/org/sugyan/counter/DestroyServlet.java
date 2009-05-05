@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.sugyan.counter.model.Counter;
-import org.sugyan.counter.template.ConfigTemplate;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -27,24 +26,24 @@ import com.google.appengine.api.users.UserServiceFactory;
  *
  */
 @SuppressWarnings("serial")
-public class ConfigServlet extends HttpServlet {
-    private static final Logger LOG = Logger.getLogger(ConfigServlet.class.getName());
+public class DestroyServlet extends HttpServlet {
+    private static final Logger LOG = Logger.getLogger(DestroyServlet.class.getName());
 
     /* (non-Javadoc)
-     * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         // TODO Auto-generated method stub
-        ConfigTemplate template = new ConfigTemplate();
+        // 必ずログイン済みであること
         UserService userService = UserServiceFactory.getUserService();
-        // ログインチェック
         if (!userService.isUserLoggedIn()) {
             LOG.severe("not signed in user");
-            resp.sendRedirect(userService.createLoginURL(req.getRequestURI()));
+            resp.sendRedirect("/");
             return;
         }
+        
         // requestのkeyからカウンターを引き当てる
         PersistenceManager pm = PMF.get().getPersistenceManager();
         try {
@@ -53,9 +52,7 @@ public class ConfigServlet extends HttpServlet {
             if (counter != null) {
                 // 現在のユーザーと関連づけられているか否か
                 if (counter.getUser().equals(userService.getCurrentUser())) {
-                    template.setCounter(counter);
-                    resp.setCharacterEncoding("UTF-8");
-                    resp.getWriter().println(template);
+                    pm.deletePersistent(counter);
                 } else {
                     LOG.severe("invalid user");
                 }
@@ -65,18 +62,23 @@ public class ConfigServlet extends HttpServlet {
         } catch (NullPointerException e) {
             // requestにkeyが指定されていない場合
             LOG.severe(e.toString());
+            return;
         } catch (IllegalArgumentException e) {
             // keyの文字列が不正な場合
             LOG.severe(e.toString());
+            return;
         } catch (JDOFatalUserException e) {
             LOG.severe(e.toString());
+            return;
         } catch (JDOObjectNotFoundException e) {
             // 指定したkeyのカウンターが存在しなかった場合
             LOG.severe(e.toString());
+            return;
         } finally {
             pm.close();
         }
-
+        
+        resp.sendRedirect("/");
     }
 
 }

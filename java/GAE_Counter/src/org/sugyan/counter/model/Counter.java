@@ -3,12 +3,16 @@
  */
 package org.sugyan.counter.model;
 
+import java.util.Date;
+
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
+import com.google.appengine.api.users.User;
 
 /**
  * @author sugyan
@@ -24,16 +28,34 @@ public class Counter {
     @Persistent
     private String name;
 
+    @Persistent
+    private User user;
+    
+    @Persistent
+    private Date date;
+    
+    @Persistent
+    private long count;
 
-    public Counter(String name) {
-        this.setName(name);
+    /**
+     * @return the count
+     */
+    public long getCount() {
+        return count;
     }
 
     /**
-     * @param name the name to set
+     * @return the date
      */
-    public void setName(String name) {
-        this.name = name;
+    public Date getDate() {
+        return date;
+    }
+
+    /**
+     * @return the encodedKey
+     */
+    public String getEncodedKey() {
+        return encodedKey;
     }
 
     /**
@@ -44,9 +66,37 @@ public class Counter {
     }
 
     /**
-     * @return the encodedKey
+     * @return the user
      */
-    public String getEncodedKey() {
-        return encodedKey;
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * @param count the count to set
+     */
+    public void setCount(long count) {
+        this.count = count;
+    }
+
+    /**
+     * @param date the date to set
+     */
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @param user the user to set
+     */
+    public void setUser(User user) {
+        this.user = user;
     }
 }

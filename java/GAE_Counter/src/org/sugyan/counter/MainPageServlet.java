@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,9 +42,12 @@ public class MainPageServlet extends HttpServlet {
         String linkUrl;
         if (userLoggedIn) {
             linkUrl = userService.createLogoutURL(req.getRequestURI());
+            // ユーザーが保持しているカウンターを取得
             PersistenceManager pm = PMF.get().getPersistenceManager();
-            String query = "SELECT FROM " + Counter.class.getName();
-            template.setCounters((List<Counter>)pm.newQuery(query).execute());
+            Query query = pm.newQuery("SELECT FROM " + Counter.class.getName());
+            query.setFilter("user == currentUser");
+            query.declareParameters("com.google.appengine.api.users.UserService currentUser");
+            template.setCounters((List<Counter>)query.execute(userService.getCurrentUser()));
         } else {
             linkUrl = userService.createLoginURL(req.getRequestURI());
         }

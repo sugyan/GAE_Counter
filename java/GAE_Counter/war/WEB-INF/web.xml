@@ -5,19 +5,35 @@
 
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
 	<servlet>
-		<servlet-name>Create</servlet-name>
-		<servlet-class>org.sugyan.counter.CreateServlet</servlet-class>
-	</servlet><servlet>
 		<servlet-name>MainPage</servlet-name>
 		<servlet-class>org.sugyan.counter.MainPageServlet</servlet-class>
+	</servlet><servlet>
+		<servlet-name>Create</servlet-name>
+		<servlet-class>org.sugyan.counter.CreateServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Destroy</servlet-name>
+		<servlet-class>org.sugyan.counter.DestroyServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Config</servlet-name>
+		<servlet-class>org.sugyan.counter.ConfigServlet</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>
-		<servlet-name>Create</servlet-name>
-		<url-pattern>/create</url-pattern>
-	</servlet-mapping><servlet-mapping>
 		<servlet-name>MainPage</servlet-name>
 		<url-pattern>/</url-pattern>
+	</servlet-mapping><servlet-mapping>
+		<servlet-name>Create</servlet-name>
+		<url-pattern>/create</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Destroy</servlet-name>
+		<url-pattern>/destroy</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Config</servlet-name>
+		<url-pattern>/config</url-pattern>
 	</servlet-mapping>
 	
 </web-app>
