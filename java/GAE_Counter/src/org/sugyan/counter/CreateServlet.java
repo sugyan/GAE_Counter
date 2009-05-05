@@ -24,7 +24,7 @@ import com.google.appengine.api.users.UserServiceFactory;
  */
 @SuppressWarnings("serial")
 public class CreateServlet extends HttpServlet {
-    private static final Logger LOG = Logger.getLogger(CreateServlet.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(CreateServlet.class.getName());
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -36,7 +36,7 @@ public class CreateServlet extends HttpServlet {
         // 必ずログイン済みであること
         UserService userService = UserServiceFactory.getUserService();
         if (!userService.isUserLoggedIn()) {
-            LOG.severe("not signed in user");
+            LOGGER.severe("not signed in user");
             resp.sendRedirect("/main");
             return;
         }
@@ -56,11 +56,11 @@ public class CreateServlet extends HttpServlet {
         try {
             pm.makePersistent(counter);
         } catch (Exception e) {
-            LOG.severe(e.toString());
+            LOGGER.severe(e.toString());
         } finally{
             pm.close();
         }
-        LOG.info(counter.getUser().toString());
+        LOGGER.info(counter.getUser().toString());
         
         resp.sendRedirect("/main");
     }

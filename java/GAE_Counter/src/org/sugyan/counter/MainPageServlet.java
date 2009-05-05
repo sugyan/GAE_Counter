@@ -24,7 +24,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 @SuppressWarnings("serial")
 public class MainPageServlet extends HttpServlet {
     @SuppressWarnings("unused")
-    private static final Logger LOG = Logger.getLogger(MainPageServlet.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(MainPageServlet.class.getName());
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)

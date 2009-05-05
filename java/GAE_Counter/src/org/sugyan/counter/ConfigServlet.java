@@ -28,7 +28,7 @@ import com.google.appengine.api.users.UserServiceFactory;
  */
 @SuppressWarnings("serial")
 public class ConfigServlet extends HttpServlet {
-    private static final Logger LOG = Logger.getLogger(ConfigServlet.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ConfigServlet.class.getName());
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -41,7 +41,7 @@ public class ConfigServlet extends HttpServlet {
         UserService userService = UserServiceFactory.getUserService();
         // ログインチェック
         if (!userService.isUserLoggedIn()) {
-            LOG.severe("not signed in user");
+            LOGGER.severe("not signed in user");
             resp.sendRedirect(userService.createLoginURL(req.getRequestURI()));
             return;
         }
@@ -57,22 +57,22 @@ public class ConfigServlet extends HttpServlet {
                     resp.setCharacterEncoding("UTF-8");
                     resp.getWriter().println(template);
                 } else {
-                    LOG.severe("invalid user");
+                    LOGGER.severe("invalid user");
                 }
             } else {
-                LOG.severe("counter not found");
+                LOGGER.severe("counter not found");
             }
         } catch (NullPointerException e) {
             // requestにkeyが指定されていない場合
-            LOG.severe(e.toString());
+            LOGGER.severe(e.toString());
         } catch (IllegalArgumentException e) {
             // keyの文字列が不正な場合
-            LOG.severe(e.toString());
+            LOGGER.severe(e.toString());
         } catch (JDOFatalUserException e) {
-            LOG.severe(e.toString());
+            LOGGER.severe(e.toString());
         } catch (JDOObjectNotFoundException e) {
             // 指定したkeyのカウンターが存在しなかった場合
-            LOG.severe(e.toString());
+            LOGGER.severe(e.toString());
         } finally {
             pm.close();
         }

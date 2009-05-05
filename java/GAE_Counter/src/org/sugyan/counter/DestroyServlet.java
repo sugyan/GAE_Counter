@@ -27,7 +27,7 @@ import com.google.appengine.api.users.UserServiceFactory;
  */
 @SuppressWarnings("serial")
 public class DestroyServlet extends HttpServlet {
-    private static final Logger LOG = Logger.getLogger(DestroyServlet.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(DestroyServlet.class.getName());
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -39,7 +39,7 @@ public class DestroyServlet extends HttpServlet {
         // 必ずログイン済みであること
         UserService userService = UserServiceFactory.getUserService();
         if (!userService.isUserLoggedIn()) {
-            LOG.severe("not signed in user");
+            LOGGER.severe("not signed in user");
             resp.sendRedirect("/main");
             return;
         }
@@ -54,25 +54,25 @@ public class DestroyServlet extends HttpServlet {
                 if (counter.getUser().equals(userService.getCurrentUser())) {
                     pm.deletePersistent(counter);
                 } else {
-                    LOG.severe("invalid user");
+                    LOGGER.severe("invalid user");
                 }
             } else {
-                LOG.severe("counter not found");
+                LOGGER.severe("counter not found");
             }
         } catch (NullPointerException e) {
             // requestにkeyが指定されていない場合
-            LOG.severe(e.toString());
+            LOGGER.severe(e.toString());
             return;
         } catch (IllegalArgumentException e) {
             // keyの文字列が不正な場合
-            LOG.severe(e.toString());
+            LOGGER.severe(e.toString());
             return;
         } catch (JDOFatalUserException e) {
-            LOG.severe(e.toString());
+            LOGGER.severe(e.toString());
             return;
         } catch (JDOObjectNotFoundException e) {
             // 指定したkeyのカウンターが存在しなかった場合
-            LOG.severe(e.toString());
+            LOGGER.severe(e.toString());
             return;
         } finally {
             pm.close();
