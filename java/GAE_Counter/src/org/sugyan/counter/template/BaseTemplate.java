@@ -40,11 +40,17 @@ public class BaseTemplate {
                "        Sign out\n" :
                "        Sign in\n") +
                "      </a>\n" +
-               "    </div>\n" + /*{% block content %}{% endblock %}*/
+               "    </div>\n" + 
+               content() + 
                "  </body>\n" +
                "</html>\n";
     }
     
+    protected String content() {
+        // TODO Auto-generated method stub
+        return "";
+    }
+
     protected String header() {
         return "";
     }
