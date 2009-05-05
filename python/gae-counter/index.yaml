@@ -14,7 +14,7 @@ indexes:
 - kind: AccessRecord
   ancestor: yes
 
-# Used once in query history.
+# Used 30 times in query history.
 - kind: AccessRecord
   ancestor: yes
   properties:

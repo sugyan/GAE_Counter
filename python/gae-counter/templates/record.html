@@ -13,7 +13,7 @@
     <td align="right">{{ record.count }}</td>
     <td align="left">{{ record.datetime|timeJST|date:"Y-m-d H:i:s O" }}</td>
     <td align="right">{{ record.remote_addr }}</td>
-    <td align="left">{{ record.user_agent|slice:":40" }}</td>
+    <td align="left">{{ record.user_agent|slice:":40" }}...</td>
     <td align="left">{{ record.referer|urlizetrunc:"40" }}</td>
   </tr>{% endfor %}
 </table>
