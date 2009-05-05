@@ -5,14 +5,11 @@
 
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
 	<servlet>
-		<servlet-name>gae_counter</servlet-name>
-		<servlet-class>org.sugyan.counter.GAE_CounterServlet</servlet-class>
+		<servlet-name>MainPage</servlet-name>
+		<servlet-class>org.sugyan.counter.MainPageServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>gae_counter</servlet-name>
-		<url-pattern>/gae_counter</url-pattern>
+		<servlet-name>MainPage</servlet-name>
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
 </web-app>
