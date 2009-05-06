@@ -3,6 +3,7 @@
  */
 package org.sugyan.counter.template;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.sugyan.counter.model.Counter;
@@ -74,12 +75,13 @@ public class MainPageTemplate extends BaseTemplate {
             return "";
         }
         
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         StringBuilder stringBuilder = new StringBuilder();
         for (Counter counter : counters) {
             stringBuilder.append(
                     "  <tr>\n" +
                     "    <td>" + counter.getName() + "</td>\n" +
-                    "    <td>" + counter.getDate() + "</td>\n" +
+                    "    <td>" + dateFormat.format(counter.getDate()) + "</td>\n" +
                     "    <td align=\"right\">" + counter.getCount() + "</td>\n" +
                     "    <td><a href=\"/config?key=" + counter.getEncodedKey() + "\">設定</a></td>\n" +
                     "    <td><a href=\"/record?key=" + counter.getEncodedKey() + "\">記録</a></td>\n" +

@@ -3,6 +3,8 @@
  */
 package org.sugyan.counter.template;
 
+import java.text.SimpleDateFormat;
+
 import org.sugyan.counter.model.Counter;
 
 /**
@@ -22,7 +24,7 @@ public class ConfigTemplate extends BaseTemplate {
                "<table>\n" +
                "  <tr>\n" +
                "    <td align=\"right\">作成日時：</td>\n" +
-               "    <td>" + counter.getDate() + "</td>\n" +
+               "    <td>" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(counter.getDate()) + "</td>\n" +
                "  </tr>\n" +
                "  <tr>\n" +
                "    <td align=\"right\">アクセス数：</td>\n" +
