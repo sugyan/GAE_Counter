@@ -23,6 +23,10 @@
 		<servlet-name>Counter</servlet-name>
 		<servlet-class>org.sugyan.counter.CounterServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>Record</servlet-name>
+		<servlet-class>org.sugyan.counter.RecordServlet</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>MainPage</servlet-name>
@@ -42,6 +46,10 @@
 	<servlet-mapping>
 		<servlet-name>Counter</servlet-name>
 		<url-pattern>/counter/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Record</servlet-name>
+		<url-pattern>/record</url-pattern>
 	</servlet-mapping>
 
 </web-app>

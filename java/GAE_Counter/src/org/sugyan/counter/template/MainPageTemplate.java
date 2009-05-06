@@ -5,6 +5,7 @@ package org.sugyan.counter.template;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.sugyan.counter.model.Counter;
 
@@ -14,16 +15,7 @@ import org.sugyan.counter.model.Counter;
  */
 public class MainPageTemplate extends BaseTemplate {
 
-    /* (non-Javadoc)
-     * @see org.sugyan.counter.template.BaseTemplate#header()
-     */
-    @Override
-    protected String header() {
-        // TODO Auto-generated method stub
-        return "<link href=\"/css/style.css\" rel=\"stylesheet\" type=\"text/css\" />";
-    }
-
-    private List<Counter> counters = null;
+   private List<Counter> counters = null;
     
     /* (non-Javadoc)
      * @see org.sugyan.counter.template.BaseTemplate#content()
@@ -49,11 +41,12 @@ public class MainPageTemplate extends BaseTemplate {
                    "  <input type=\"submit\" value=\"作成する\" />\n" +
                    "</form>\n" : "");   
         } else {
-            return "<h1>GAE Counter</h1>\n" +
-//                   "<img src=\"http://gae-counter.appspot.com/counter/agtnYWUtY291bnRlcnIOCxIHQ291bnRlchjUDww.png\">\n" +
+            return "<h1>GAE Counter (Java version)</h1>\n" +
+                   "<img src=\"http://2.latest.gae-counter.appspot.com/counter/agtnYWUtY291bnRlcnIOCxIHQ291bnRlchj0Lgw.png\"><br />\n" +
+                   "<a href=\"http://gae-counter.appspot.com\">Python版はこちら</a>" +
                    "<h2>説明</h2>\n" +
                    "<ul>\n" +
-                   "  <li>Google App Engineで動くアクセスカウンターです。</li>\n" +
+                   "  <li>Google App Engine(Java版)で動くアクセスカウンターです。</li>\n" +
                    "  <li>アクセスされるたびに数字が増加する画像データを提供します。</li>\n" +
                    "  <li>アクセス記録を取って簡単なアクセス解析もできます。</li>\n" +
                    "  <li>Googleアカウントで<a href=\"" + getLinkUrl() + "\">ログイン</a>すると使えます。</li>" +
@@ -70,22 +63,32 @@ public class MainPageTemplate extends BaseTemplate {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.sugyan.counter.template.BaseTemplate#header()
+     */
+    @Override
+    protected String header() {
+        // TODO Auto-generated method stub
+        return "<link href=\"/css/style.css\" rel=\"stylesheet\" type=\"text/css\" />\n";
+    }
+
     private String counterList() {
         if (counters == null) {
             return "";
         }
         
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("JST"));
         StringBuilder stringBuilder = new StringBuilder();
         for (Counter counter : counters) {
-            stringBuilder.append(
-                    "  <tr>\n" +
-                    "    <td>" + counter.getName() + "</td>\n" +
-                    "    <td>" + dateFormat.format(counter.getDate()) + "</td>\n" +
-                    "    <td align=\"right\">" + counter.getCount() + "</td>\n" +
-                    "    <td><a href=\"/config?key=" + counter.getEncodedKey() + "\">設定</a></td>\n" +
-                    "    <td><a href=\"/record?key=" + counter.getEncodedKey() + "\">記録</a></td>\n" +
-                    "  </tr>\n"); 
+            stringBuilder
+                .append("  <tr>\n")
+                .append("    <td>" + counter.getName() + "</td>\n")
+                .append("    <td>" + dateFormat.format(counter.getDate()) + "</td>\n")
+                .append("    <td align=\"right\">" + counter.getCount() + "</td>\n")
+                .append("    <td><a href=\"/config?key=" + counter.getEncodedKey() + "\">設定</a></td>\n")
+                .append("    <td><a href=\"/record?key=" + counter.getEncodedKey() + "\">記録</a></td>\n")
+                .append("  </tr>\n"); 
         }
         return stringBuilder.toString();
     }

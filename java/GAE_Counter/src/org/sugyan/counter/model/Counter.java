@@ -5,6 +5,8 @@ package org.sugyan.counter.model;
 
 import java.util.Date;
 
+import java.util.List;
+
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -37,6 +39,9 @@ public class Counter {
     @Persistent
     private long count;
 
+    @Persistent(mappedBy = "counter")
+    private List<JavaAccessRecord> records;
+    
     /**
      * 
      */
@@ -106,4 +111,25 @@ public class Counter {
     public void setUser(User user) {
         this.user = user;
     }
+
+    /**
+     * @param records the records to set
+     */
+    public void setRecords(List<JavaAccessRecord> records) {
+        this.records = records;
+    }
+
+    /**
+     * @return the records
+     */
+    public List<JavaAccessRecord> getRecords() {
+        return records;
+    }
+
+    /**
+     * @param records the records to set
+    public void setRecords(List<AccessRecord> records) {
+        this.records = records;
+    }
+     */
 }

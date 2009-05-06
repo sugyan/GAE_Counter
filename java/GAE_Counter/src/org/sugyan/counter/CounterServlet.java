@@ -6,6 +6,7 @@ package org.sugyan.counter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
@@ -19,10 +20,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.sugyan.counter.model.JavaAccessRecord;
 import org.sugyan.counter.model.Counter;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Link;
 import com.google.appengine.api.images.Composite;
 import com.google.appengine.api.images.Image;
 import com.google.appengine.api.images.ImagesService;
@@ -64,24 +67,46 @@ public class CounterServlet extends HttpServlet {
             resp.sendError(404);
             return;
         }
-        // カウントのインクリメント
         long count;
         PersistenceManager pm = PMF.get().getPersistenceManager();
         try {
             Key key = KeyFactory.stringToKey(strings[0]);
+            // カウントのインクリメントと、アクセスの記録を同時に行う
+            // transaction
             Transaction transaction = pm.currentTransaction();
             try {
+                // transaction開始
                 transaction.begin();
+                // カウンターの取得
                 Counter counter = pm.getObjectById(Counter.class, key);
+                count = counter.getCount() + 1;
+                // アクセス記録
+                JavaAccessRecord record = new JavaAccessRecord();
+                record.setCount(count);
+                record.setDateTime(new Date());
+                String referer = req.getHeader("Referer");
+                if (referer != null) {
+                    record.setReferer(new Link(referer));
+                } else {
+                    record.setReferer(new Link(""));
+                }
+                record.setUserAgent(req.getHeader("User-Agent"));
+                record.setRemoteAddr(req.getRemoteAddr());
+                record.setCounter(counter);
+                JavaAccessRecord result = pm.makePersistent(record);
+                // カウンターの変更
                 counter.incrementCount();
-                count = counter.getCount();
+                counter.getRecords().add(result);
                 pm.makePersistent(counter);
+                // transaction終了
                 transaction.commit();
             } finally {
                 if (transaction.isActive()) {
+                    LOGGER.warning("transaction failed");
                     transaction.rollback();
                 }
             }
+            
         } catch (IllegalArgumentException e) {
             LOGGER.severe(e.toString());
             resp.sendError(404);

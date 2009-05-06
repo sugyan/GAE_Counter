@@ -9,14 +9,13 @@ import java.util.logging.Logger;
 import javax.jdo.JDOFatalUserException;
 import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
-import javax.jdo.Transaction;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sugyan.counter.model.JavaAccessRecord;
 import org.sugyan.counter.model.Counter;
+import org.sugyan.counter.template.RecordTemplate;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -28,24 +27,24 @@ import com.google.appengine.api.users.UserServiceFactory;
  *
  */
 @SuppressWarnings("serial")
-public class DestroyServlet extends HttpServlet {
-    private static final Logger LOGGER = Logger.getLogger(DestroyServlet.class.getName());
+public class RecordServlet extends HttpServlet {
+    private static final Logger LOGGER = Logger.getLogger(RecordServlet.class.getName());
 
     /* (non-Javadoc)
-     * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         // TODO Auto-generated method stub
-        // 必ずログイン済みであること
+        RecordTemplate template = new RecordTemplate();
         UserService userService = UserServiceFactory.getUserService();
+        // ログインチェック
         if (!userService.isUserLoggedIn()) {
             LOGGER.severe("not signed in user");
-            resp.sendRedirect("/main");
+            resp.sendRedirect(userService.createLoginURL(req.getRequestURI()));
             return;
         }
-        
         // requestのkeyからカウンターを引き当てる
         PersistenceManager pm = PMF.get().getPersistenceManager();
         try {
@@ -54,20 +53,9 @@ public class DestroyServlet extends HttpServlet {
             if (counter != null) {
                 // 現在のユーザーと関連づけられているか否か
                 if (counter.getUser().equals(userService.getCurrentUser())) {
-                    Transaction transaction = pm.currentTransaction();
-                    try {
-                        transaction.begin();
-                        for (JavaAccessRecord record : counter.getRecords()) {
-                            pm.deletePersistent(record);
-                        }
-                        pm.deletePersistent(counter);
-                        transaction.commit();
-                    } finally {
-                        if (transaction.isActive()) {
-                            LOGGER.severe("transaction failed");
-                            transaction.rollback();
-                        }
-                    }
+                    template.setCounter(counter);
+                    resp.setCharacterEncoding("UTF-8");
+                    resp.getWriter().println(template);
                 } else {
                     LOGGER.severe("invalid user");
                     resp.sendError(403);
@@ -75,7 +63,7 @@ public class DestroyServlet extends HttpServlet {
                 }
             } else {
                 LOGGER.severe("counter not found");
-                resp.sendError(400);
+                resp.sendError(404);
                 return;
             }
         } catch (NullPointerException e) {
@@ -95,13 +83,11 @@ public class DestroyServlet extends HttpServlet {
         } catch (JDOObjectNotFoundException e) {
             // 指定したkeyのカウンターが存在しなかった場合
             LOGGER.severe(e.toString());
-            resp.sendError(400);
+            resp.sendError(404);
             return;
         } finally {
             pm.close();
         }
-        
-        resp.sendRedirect("/main");
     }
 
 }

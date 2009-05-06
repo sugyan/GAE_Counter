@@ -69,16 +69,16 @@ public class ConfigServlet extends HttpServlet {
         } catch (NullPointerException e) {
             // requestにkeyが指定されていない場合
             LOGGER.severe(e.toString());
-            resp.sendError(404);
+            resp.sendError(400);
             return;
         } catch (IllegalArgumentException e) {
             // keyの文字列が不正な場合
             LOGGER.severe(e.toString());
-            resp.sendError(404);
+            resp.sendError(400);
             return;
         } catch (JDOFatalUserException e) {
             LOGGER.severe(e.toString());
-            resp.sendError(404);
+            resp.sendError(400);
             return;
         } catch (JDOObjectNotFoundException e) {
             // 指定したkeyのカウンターが存在しなかった場合

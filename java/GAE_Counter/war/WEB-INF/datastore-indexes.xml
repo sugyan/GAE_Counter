@@ -1,10 +1,8 @@
-<!-- Indices written at 09/05/07 7:20 -->
-
-<datastore-indexes>
-
-    <!-- Used 41 times in query history -->
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes
+  xmlns="http://appengine.google.com/ns/datastore-indexes/1.0"
+  autoGenerate="true">
     <datastore-index kind="JavaAccessRecord" ancestor="true" source="auto">
         <property name="records_INTEGER_IDX" direction="asc"/>
     </datastore-index>
-
 </datastore-indexes>
