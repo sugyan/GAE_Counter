@@ -4,6 +4,7 @@
 package org.sugyan.counter.template;
 
 import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 import org.sugyan.counter.model.Counter;
 
@@ -20,11 +21,14 @@ public class ConfigTemplate extends BaseTemplate {
     @Override
     protected String content() {
         // TODO Auto-generated method stub
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        TimeZone zone = TimeZone.getTimeZone("JST");
+        dateFormat.setTimeZone(zone);
         return "<h2>" + counter.getName() + "</h2>\n" +
                "<table>\n" +
                "  <tr>\n" +
                "    <td align=\"right\">作成日時：</td>\n" +
-               "    <td>" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(counter.getDate()) + "</td>\n" +
+               "    <td>" + dateFormat.format(counter.getDate()) + "</td>\n" +
                "  </tr>\n" +
                "  <tr>\n" +
                "    <td align=\"right\">アクセス数：</td>\n" +
