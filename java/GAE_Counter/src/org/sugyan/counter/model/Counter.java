@@ -28,7 +28,7 @@ public class Counter {
     @Persistent
     private String name;
 
-    @Persistent
+    @Persistent(defaultFetchGroup = "true")
     private User user;
     
     @Persistent
@@ -37,6 +37,13 @@ public class Counter {
     @Persistent
     private long count;
 
+    /**
+     * 
+     */
+    public void incrementCount() {
+        this.count++;
+    }
+    
     /**
      * @return the count
      */

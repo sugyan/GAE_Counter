@@ -55,24 +55,32 @@ public class DestroyServlet extends HttpServlet {
                     pm.deletePersistent(counter);
                 } else {
                     LOGGER.severe("invalid user");
+                    resp.sendError(403);
+                    return;
                 }
             } else {
                 LOGGER.severe("counter not found");
+                resp.sendError(400);
+                return;
             }
         } catch (NullPointerException e) {
             // requestにkeyが指定されていない場合
             LOGGER.severe(e.toString());
+            resp.sendError(400);
             return;
         } catch (IllegalArgumentException e) {
             // keyの文字列が不正な場合
             LOGGER.severe(e.toString());
+            resp.sendError(400);
             return;
         } catch (JDOFatalUserException e) {
             LOGGER.severe(e.toString());
+            resp.sendError(400);
             return;
         } catch (JDOObjectNotFoundException e) {
             // 指定したkeyのカウンターが存在しなかった場合
             LOGGER.severe(e.toString());
+            resp.sendError(400);
             return;
         } finally {
             pm.close();
