@@ -38,10 +38,10 @@ public class ConfigTemplate extends BaseTemplate {
                "    <td align=\"right\">URL：</td>\n" +
                "    <td>\n" +
                "      <a href=\"/counter/" + counter.getEncodedKey() + ".png\">\n" +
-               "        http://gae-counter.appspot.com/counter/" + counter.getEncodedKey() + ".png\n" +
+               "        http://2.latest.gae-counter.appspot.com/counter/" + counter.getEncodedKey() + ".png\n" +
                "      </a><br />\n" +
                "      <a href=\"/counter/" + counter.getEncodedKey() + ".jpg\">\n" +
-               "        http://gae-counter.appspot.com/counter/" + counter.getEncodedKey() + ".jpg\n" +
+               "        http://2.latest.gae-counter.appspot.com/counter/" + counter.getEncodedKey() + ".jpg\n" +
                "      </a><br />\n" +
                "    </td>\n" +
                "  </tr>\n" +
