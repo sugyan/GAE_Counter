@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="com.google.appengine.api.users.User "%>
-<%@ page import="com.google.appengine.api.users.UserService "%>
-<%@ page import="com.google.appengine.api.users.UserServiceFactory "%>
+<%@ page import="com.google.appengine.api.users.User" %>
+<%@ page import="com.google.appengine.api.users.UserService" %>
+<%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%
 	UserService userService = UserServiceFactory.getUserService();
 	User user = userService.getCurrentUser();
@@ -33,8 +33,8 @@
       <%= action %>
     </a>
   </div>
-  <a href="http://gae-counter.appspot.com">Python版はこちら</a>
   <div id="main">
+    <a href="http://gae-counter.appspot.com">Python版はこちら</a>
     <div align="center">
         <a href="/manage.jsp">
           管理画面へ

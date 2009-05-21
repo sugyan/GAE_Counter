@@ -5,6 +5,7 @@ package org.sugyan.counter;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
@@ -32,12 +33,11 @@ public class CreateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        // TODO Auto-generated method stub
         // 必ずログイン済みであること
         UserService userService = UserServiceFactory.getUserService();
         if (!userService.isUserLoggedIn()) {
             LOGGER.severe("not signed in user");
-            resp.sendRedirect("/main");
+            resp.sendRedirect("/");
             return;
         }
         // request parameterからカウンター名を受け取る
@@ -56,13 +56,12 @@ public class CreateServlet extends HttpServlet {
         try {
             pm.makePersistent(counter);
         } catch (Exception e) {
-            LOGGER.severe(e.toString());
+            LOGGER.log(Level.SEVERE, "", e);
         } finally{
             pm.close();
         }
-        LOGGER.info(counter.getUser().toString());
         
-        resp.sendRedirect("/main");
+        resp.sendRedirect("/manage.jsp");
     }
     
 }
