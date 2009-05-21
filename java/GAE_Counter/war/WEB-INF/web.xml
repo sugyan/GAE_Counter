@@ -51,5 +51,8 @@
 		<servlet-name>Record</servlet-name>
 		<url-pattern>/record</url-pattern>
 	</servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
 
 </web-app>

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.sugyan.counter.model.Counter;
-import org.sugyan.counter.template.MainPageTemplate;
+//import org.sugyan.counter.template.MainPageTemplate;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -34,11 +34,11 @@ public class MainPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         // TODO Auto-generated method stub
-        MainPageTemplate template = new MainPageTemplate();
+//        MainPageTemplate template = new MainPageTemplate();
         UserService userService = UserServiceFactory.getUserService();
         // templateに値をセット
         boolean userLoggedIn = userService.isUserLoggedIn();
-        template.setUserLoggedIn(userLoggedIn);
+//        template.setUserLoggedIn(userLoggedIn);
         String linkUrl;
         if (userLoggedIn) {
             linkUrl = userService.createLogoutURL(req.getRequestURI());
@@ -47,14 +47,14 @@ public class MainPageServlet extends HttpServlet {
             Query query = pm.newQuery("SELECT FROM " + Counter.class.getName());
             query.setFilter("user == currentUser");
             query.declareParameters("com.google.appengine.api.users.UserService currentUser");
-            template.setCounters((List<Counter>)query.execute(userService.getCurrentUser()));
+//            template.setCounters((List<Counter>)query.execute(userService.getCurrentUser()));
         } else {
             linkUrl = userService.createLoginURL(req.getRequestURI());
         }
-        template.setLinkUrl(linkUrl);
-        template.setCurrentUser(userService.getCurrentUser());
+//        template.setLinkUrl(linkUrl);
+//        template.setCurrentUser(userService.getCurrentUser());
         resp.setCharacterEncoding("UTF-8");
-        resp.getWriter().println(template);
+//        resp.getWriter().println(template);
     }
     
 }

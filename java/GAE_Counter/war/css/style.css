@@ -1,3 +1,54 @@
+@CHARSET "UTF-8";
+
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+body {
+	line-height: 150%;
+	color: #333333;
+}
+
+#main p,a {
+	font-size: 100%;
+	margin: 1em 25px 1em 40px;
+	line-height: 170%;
+}
+
+ul {
+	margin: 0em 25px 2em 65px;
+	font-size: 96%;
+	padding: 1em 1em 1em 2em;
+	list-style: square;
+}
+
+h1 {
+	border-bottom: 10px solid #C0FFEE;
+	padding: 35px 0px 10px 12px;
+	background-color: #BEEF99;
+}
+
+h2 {
+	margin: 2em 20px 0em;
+	padding: 5px 10px;
+	clear: both;
+	font-size: 95%;
+	font-weight: bold;
+	border-left: 10px solid #999999;
+	color: #FFFFFF;
+	border-bottom: 1px solid #666666;
+	background-color: #666666;
+}
+
+a:link {
+	color: #003399;
+}
+
+a:visited {
+	color: #50105A;
+}
+
 table {
     margin-top: 0.2em;
     margin-bottom: 1em;
