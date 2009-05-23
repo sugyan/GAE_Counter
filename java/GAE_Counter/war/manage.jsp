@@ -59,7 +59,7 @@
           <td><%= counter.getName() %></td>
           <td><%= dateFormat.format(counter.getDate()) %></td>
           <td><%= counter.getCount() %></td>
-          <td><a href="/record?id=<%= counter.getEncodedKey() %>">アクセス記録</a></td>
+          <td><a href="/record.jsp?id=<%= counter.getEncodedKey() %>">アクセス記録</a></td>
           <td><a href="/config.jsp?id=<%= counter.getEncodedKey() %>">設定</a></td>
         </tr>
 <%
