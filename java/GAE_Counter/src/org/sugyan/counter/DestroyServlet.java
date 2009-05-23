@@ -101,7 +101,7 @@ public class DestroyServlet extends HttpServlet {
             pm.close();
         }
         
-        resp.sendRedirect("/main");
+        resp.sendRedirect("/manage.jsp");
     }
 
 }

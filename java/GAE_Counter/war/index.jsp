@@ -27,14 +27,14 @@
   <h1>GAE Counter (Java version)</h1>
   <div align="right">
 <% if (user != null) { %>
-    <%= user.getNickname()  %>
+    <%= user.getNickname()  %>さん
 <% } %>
     <a href="<%= linkUrl %>">
       <%= action %>
     </a>
   </div>
   <div id="main">
-    <a href="http://gae-counter.appspot.com">Python版はこちら</a>
+    <p><a href="http://gae-counter.appspot.com">Python版はこちら</a></p>
     <div align="center">
         <a href="/manage.jsp">
           管理画面へ
@@ -49,13 +49,17 @@
     </ul>
     <h2>ソース</h2>
     <p>GitHubで公開しています。</p>
-    <a href="http://github.com/sugyan/GAE_Counter/tree/master">
-      http://github.com/sugyan/GAE_Counter/tree/master
-    </a>
+    <p>
+      <a href="http://github.com/sugyan/GAE_Counter/tree/master">
+        http://github.com/sugyan/GAE_Counter/tree/master
+      </a>
+    </p>
     <h2>作者</h2>
     <p>すぎゃーん</p>
-    <a href="http://d.hatena.ne.jp/sugyan/">http://d.hatena.ne.jp/sugyan/</a><br>
-    <a href="http://twitter.com/sugyan">http://twitter.com/sugyan</a><br>
+    <p>
+      <a href="http://d.hatena.ne.jp/sugyan/">http://d.hatena.ne.jp/sugyan/</a><br>
+      <a href="http://twitter.com/sugyan">http://twitter.com/sugyan</a>
+    </p>
   </div>
 </body>
 </html>
