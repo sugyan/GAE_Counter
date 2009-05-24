@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.TimeZone" %>
@@ -56,7 +57,7 @@
 	    	Counter counter = (Counter)obj;
 %>
         <tr>
-          <td><%= counter.getName() %></td>
+          <td><c:out value="<%= counter.getName() %>" /></td>
           <td><%= dateFormat.format(counter.getDate()) %></td>
           <td><%= counter.getCount() %></td>
           <td><a href="/record.jsp?id=<%= counter.getEncodedKey() %>">アクセス記録</a></td>

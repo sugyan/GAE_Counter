@@ -3,6 +3,7 @@
 		 pageEncoding="UTF-8"
 		 errorPage="error.jsp"
 %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Collections" %>
 <%@ page import="java.util.List" %>
@@ -54,7 +55,7 @@
       <a href="<%= logoutUrl %>">Sign out</a>
     </div>
     <div id="main">
-      <h2><%= counter.getName() %></h2>
+      <h2><c:out value="<%= counter.getName() %>" /></h2>
       <table>
         <tr>
           <th>Count</th>
