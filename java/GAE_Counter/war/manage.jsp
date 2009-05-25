@@ -49,19 +49,24 @@
         <tr>
           <th>カウンター名</th>
           <th>作成日</th>
-          <th>アクセス数</th>
-          <th colspan="2"></th>
+          <th>カウント数</th>
         </tr>
 <%
 		for (Object obj : counters) {
 	    	Counter counter = (Counter)obj;
 %>
         <tr>
-          <td><c:out value="<%= counter.getName() %>" /></td>
+          <td>
+            <a href="/config.jsp?id=<%= counter.getEncodedKey() %>">
+              <c:out value="<%= counter.getName() %>" />
+            </a>
+          </td>
           <td><%= dateFormat.format(counter.getDate()) %></td>
-          <td><%= counter.getCount() %></td>
-          <td><a href="/record.jsp?id=<%= counter.getEncodedKey() %>">アクセス記録</a></td>
-          <td><a href="/config.jsp?id=<%= counter.getEncodedKey() %>">設定</a></td>
+          <td align="right">
+            <a href="/record.jsp?id=<%= counter.getEncodedKey() %>">
+              <%= counter.getCount() %>
+            </a>
+          </td>
         </tr>
 <%
 		}

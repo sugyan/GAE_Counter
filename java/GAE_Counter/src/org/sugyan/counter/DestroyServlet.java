@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sugyan.counter.model.JavaAccessRecord;
 import org.sugyan.counter.model.Counter;
 
 import com.google.appengine.api.datastore.Key;
@@ -57,9 +56,12 @@ public class DestroyServlet extends HttpServlet {
                     Transaction transaction = pm.currentTransaction();
                     try {
                         transaction.begin();
+                        /*
+                         * TODO recordの削除は別の場所で行う
                         for (JavaAccessRecord record : counter.getRecords()) {
                             pm.deletePersistent(record);
                         }
+                        */
                         pm.deletePersistent(counter);
                         transaction.commit();
                     } finally {
