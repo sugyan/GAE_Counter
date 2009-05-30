@@ -5,139 +5,110 @@ package org.sugyan.counter.model;
 
 import java.util.Date;
 
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
-import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Link;
 
 /**
  * @author sugyan
  * Python版と区別するためにkindでJava版であることを明示する
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class JavaAccessRecord {
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Key key;
     
-    @Persistent
-    private long count;
+    public static final String KIND = JavaAccessRecord.class.getSimpleName();
+    public static final String DATETIME   = "datetime";
     
-    @Persistent
-    private Date datetime;
+    private static final String COUNT      = "count";
+    private static final String REFERER    = "referer";
+    private static final String USERAGENT  = "user_agent";
+    private static final String REMOTEADDR = "remote_addr";
     
-    @Persistent
-    private Link referer;
+    private Entity entity;
     
-    @Persistent
-    private String user_agent;
-    
-    @Persistent
-    private String remote_addr;
-    
-    @Persistent
-    private Counter counter;
-
     /**
-     * @param count the count to set
+     * @param entity
      */
-    public void setCount(long count) {
-        this.count = count;
+    public JavaAccessRecord(Entity entity) {
+        this.entity = entity;
     }
 
     /**
-     * @return the count
+     * @return
      */
     public long getCount() {
-        return count;
+        return (Long)entity.getProperty(COUNT);
     }
-
+    
     /**
-     * @param datetime the datetime to set
-     */
-    public void setDateTime(Date datetime) {
-        this.datetime = datetime;
-    }
-
-    /**
-     * @return the datetime
+     * @return
      */
     public Date getDateTime() {
-        return datetime;
+        return (Date)entity.getProperty(DATETIME);
     }
-
+    
     /**
-     * @param referer the referer to set
+     * @return
      */
-    public void setReferer(Link referer) {
-        this.referer = referer;
+    public Entity getEntity() {
+        return entity;
     }
-
+    
     /**
-     * @return the referer
+     * @return
      */
     public Link getReferer() {
-        return referer;
+        return (Link)entity.getProperty(REFERER);
     }
-
+    
     /**
-     * @param user_agent the user_agent to set
-     */
-    public void setUserAgent(String user_agent) {
-        this.user_agent = user_agent;
-    }
-
-    /**
-     * @return the user_agent
-     */
-    public String getUserAgent() {
-        return user_agent;
-    }
-
-    /**
-     * @param remote_addr the remote_addr to set
-     */
-    public void setRemoteAddr(String remote_addr) {
-        this.remote_addr = remote_addr;
-    }
-
-    /**
-     * @return the remote_addr
+     * @return
      */
     public String getRemoteAddr() {
-        return remote_addr;
+        return (String)entity.getProperty(REMOTEADDR);
+    }
+    
+    /**
+     * @return
+     */
+    public String getUserAgent() {
+        return (String)entity.getProperty(USERAGENT);
+    }
+    
+    /**
+     * @param count
+     */
+    public void setCount(long count) {
+        entity.setProperty(COUNT, count);
     }
 
     /**
-     * @param key the key to set
+     * @param date
      */
-    public void setKey(Key key) {
-        this.key = key;
+    public void setDateTime(Date date) {
+        entity.setProperty(DATETIME, date);
+    }
+    
+    /**
+     * @param referer
+     */
+    public void setReferer(Link referer) {
+        if (referer.getValue() != null) {
+            entity.setProperty(REFERER, referer);
+        } else {
+            entity.setProperty(REFERER, new Link(""));
+        }
     }
 
     /**
-     * @return the key
+     * @param remoteAddr
      */
-    public Key getKey() {
-        return key;
+    public void setRemoteAddr(String remoteAddr) {
+        entity.setProperty(REMOTEADDR, remoteAddr);
     }
-
+    
     /**
-     * @param counter the counter to set
+     * @param userAgent
      */
-    public void setCounter(Counter counter) {
-        this.counter = counter;
+    public void setUserAgent(String userAgent) {
+        entity.setProperty(USERAGENT, userAgent);
     }
-
-    /**
-     * @return the counter
-     */
-    public Counter getCounter() {
-        return counter;
-    }
-
 }

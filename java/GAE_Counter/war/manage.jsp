@@ -3,12 +3,17 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.TimeZone" %>
-<%@ page import="javax.jdo.PersistenceManager" %>
-<%@ page import="javax.jdo.Query" %>
+<%@ page import="com.google.appengine.api.datastore.DatastoreService" %>
+<%@ page import="com.google.appengine.api.datastore.DatastoreServiceFactory" %>
+<%@ page import="com.google.appengine.api.datastore.Entity" %>
+<%@ page import="com.google.appengine.api.datastore.Key" %>
+<%@ page import="com.google.appengine.api.datastore.KeyFactory" %>
+<%@ page import="com.google.appengine.api.datastore.PreparedQuery" %>
+<%@ page import="com.google.appengine.api.datastore.Query" %>
+<%@ page import="com.google.appengine.api.datastore.Query.FilterOperator" %>
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
-<%@ page import="org.sugyan.counter.PMF" %>
 <%@ page import="org.sugyan.counter.model.Counter" %>
 <%!
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -17,14 +22,13 @@
 	String logoutUrl = userService.createLogoutURL("/");
 %>
 <%
+	DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
 	dateFormat.setTimeZone(zone);
 	User user = userService.getCurrentUser();
-	
-    PersistenceManager pm = PMF.get().getPersistenceManager();
-    Query query = pm.newQuery("SELECT FROM " + Counter.class.getName());
-    query.setFilter("user == currentUser");
-    query.declareParameters("com.google.appengine.api.users.UserService currentUser");
-	List<?> counters = (List<?>)query.execute(user);
+
+    Query query = new Query(Counter.KIND)
+    	.addFilter(Counter.USER, FilterOperator.EQUAL, user);
+    PreparedQuery counterQuery = datastoreService.prepare(query);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -43,7 +47,7 @@
     <div id="main">
       <p>カウンターは３つまで作れます。</p>
 <%
-	if (counters.size() > 0) {
+	if (counterQuery.countEntities() > 0) {
 %>      
       <table>
         <tr>
@@ -52,18 +56,19 @@
           <th>カウント数</th>
         </tr>
 <%
-		for (Object obj : counters) {
-	    	Counter counter = (Counter)obj;
+		for (Entity entity : counterQuery.asIterable()) {
+	    	Key key = entity.getKey();
+	    	Counter counter = new Counter(entity);
 %>
         <tr>
           <td>
-            <a href="/config.jsp?id=<%= counter.getEncodedKey() %>">
+            <a href="/config.jsp?id=<%= KeyFactory.keyToString(key) %>">
               <c:out value="<%= counter.getName() %>" />
             </a>
           </td>
           <td><%= dateFormat.format(counter.getDate()) %></td>
           <td align="right">
-            <a href="/record.jsp?id=<%= counter.getEncodedKey() %>">
+            <a href="/record.jsp?id=<%= KeyFactory.keyToString(key) %>">
               <%= counter.getCount() %>
             </a>
           </td>
@@ -76,7 +81,7 @@
 	}
 %>
 <%
-	if (counters.size() < 3) {
+	if (counterQuery.countEntities() < 3) {
 %>
       <h2>新規作成</h2>
       <form method="POST" action="/create">

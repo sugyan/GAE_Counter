@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.sugyan.counter.model.Counter;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
@@ -47,18 +49,16 @@ public class CreateServlet extends HttpServlet {
         }
         
         // entityの生成
-        Counter counter = new Counter();
+        Counter counter = new Counter(new Entity(Counter.KIND));
         counter.setName(name);
         counter.setUser(userService.getCurrentUser());
         counter.setDate(new Date());
         counter.setCount(0);
-        PersistenceManager pm = PMF.get().getPersistenceManager();
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         try {
-            pm.makePersistent(counter);
+            datastoreService.put(counter.getEntity());
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "", e);
-        } finally{
-            pm.close();
         }
         
         resp.sendRedirect("/manage.jsp");

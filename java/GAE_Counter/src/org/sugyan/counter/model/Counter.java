@@ -5,131 +5,61 @@ package org.sugyan.counter.model;
 
 import java.util.Date;
 
-import java.util.List;
-
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.users.User;
 
 /**
  * @author sugyan
  *
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Counter {
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String encodedKey; 
-    
-    @Persistent
-    private String name;
 
-    @Persistent(defaultFetchGroup = "true")
-    private User user;
+    public static final String KIND = Counter.class.getSimpleName();
+    public static final String USER  = "user";
     
-    @Persistent
-    private Date date;
+    private static final String NAME  = "name";
+    private static final String DATE  = "date";
+    private static final String COUNT = "count";
     
-    @Persistent
-    private long count;
+    private Entity entity;
 
-    @Persistent(mappedBy = "counter")
-    private List<JavaAccessRecord> records;
-    
-    /**
-     * 
-     */
-    public void incrementCount() {
-        this.count++;
+    public Counter(Entity entity) {
+        this.entity = entity;
     }
     
-    /**
-     * @return the count
-     */
+    public Entity getEntity() {
+        return entity;
+    }
+    
     public long getCount() {
-        return count;
+        return (Long)entity.getProperty(COUNT);
     }
-
-    /**
-     * @return the date
-     */
+    
     public Date getDate() {
-        return date;
+        return (Date)entity.getProperty(DATE);
     }
-
-    /**
-     * @return the encodedKey
-     */
-    public String getEncodedKey() {
-        return encodedKey;
-    }
-
-    /**
-     * @return the name
-     */
+    
     public String getName() {
-        return name;
+        return (String)entity.getProperty(NAME);
     }
 
-    /**
-     * @return the user
-     */
     public User getUser() {
-        return user;
+        return (User)entity.getProperty(USER);
     }
 
-    /**
-     * @param count the count to set
-     */
     public void setCount(long count) {
-        this.count = count;
+        entity.setProperty(COUNT, count);
     }
-
-    /**
-     * @param date the date to set
-     */
+    
     public void setDate(Date date) {
-        this.date = date;
+        entity.setProperty(DATE, date);
     }
-
-    /**
-     * @param name the name to set
-     */
+    
     public void setName(String name) {
-        this.name = name;
+        entity.setProperty(NAME, name);
     }
-
-    /**
-     * @param user the user to set
-     */
+    
     public void setUser(User user) {
-        this.user = user;
+        entity.setProperty(USER, user);
     }
-
-    /**
-     * @param records the records to set
-     */
-    public void setRecords(List<JavaAccessRecord> records) {
-        this.records = records;
-    }
-
-    /**
-     * @return the records
-     */
-    public List<JavaAccessRecord> getRecords() {
-        return records;
-    }
-
-    /**
-     * @param records the records to set
-    public void setRecords(List<AccessRecord> records) {
-        this.records = records;
-    }
-     */
 }

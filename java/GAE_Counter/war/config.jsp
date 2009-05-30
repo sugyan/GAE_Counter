@@ -6,14 +6,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.TimeZone" %>
-<%@ page import="javax.jdo.PersistenceManager" %>
+<%@ page import="com.google.appengine.api.datastore.DatastoreService" %>
+<%@ page import="com.google.appengine.api.datastore.DatastoreServiceFactory" %>
 <%@ page import="com.google.appengine.api.datastore.Key" %>
 <%@ page import="com.google.appengine.api.datastore.KeyFactory" %>
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%@ page import="org.sugyan.counter.model.Counter" %>
-<%@ page import="org.sugyan.counter.PMF" %>
 <%!
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     TimeZone zone = TimeZone.getTimeZone("JST");
@@ -27,9 +27,11 @@
 	} else {
 	    response.sendError(403);
 	}
-	Key key = KeyFactory.stringToKey(request.getParameter("id"));
-	PersistenceManager pm = PMF.get().getPersistenceManager();
-	Counter counter = pm.getObjectById(Counter.class, key);
+	DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+	String keyString = request.getParameter("id");
+	Key key = KeyFactory.stringToKey(keyString);
+	
+	Counter counter = new Counter(datastoreService.get(key));
 	if (!userService.getCurrentUser().equals(counter.getUser())) {
 	    response.sendError(403);
 	}
@@ -63,17 +65,17 @@
         <tr>
           <td align="right">URL：</td>
           <td>
-            <a href="/counter/<%= counter.getEncodedKey() %>.png">
-              http://java.latest.gae-counter.appspot.com/counter/<%= counter.getEncodedKey() %>.png
+            <a href="/counter/<%= keyString %>.png">
+              http://java.latest.gae-counter.appspot.com/counter/<%= keyString %>.png
             </a><br />
-            <a href="/counter/<%= counter.getEncodedKey() %>.jpg">
-              http://java.latest.gae-counter.appspot.com/counter/<%= counter.getEncodedKey() %>.jpg
+            <a href="/counter/<%= keyString %>.jpg">
+              http://java.latest.gae-counter.appspot.com/counter/<%= keyString %>.jpg
             </a><br />
           </td>
         </tr>
       </table>
       <form method="POST" action="/destroy">
-        <input type="hidden" name="key" value="<%= counter.getEncodedKey() %>">
+        <input type="hidden" name="key" value="<%= keyString %>">
         <p>
           <input type="submit" value="削除する"
                  onclick="javascript:return confirm('本当に削除しますか？') ? true : false">

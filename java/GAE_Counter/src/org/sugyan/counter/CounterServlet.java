@@ -8,12 +8,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.jdo.JDOFatalUserException;
-import javax.jdo.JDOObjectNotFoundException;
-import javax.jdo.PersistenceManager;
-import javax.jdo.Transaction;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,9 +20,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.sugyan.counter.model.JavaAccessRecord;
 import org.sugyan.counter.model.Counter;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Link;
+import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.images.Composite;
 import com.google.appengine.api.images.Image;
 import com.google.appengine.api.images.ImagesService;
@@ -63,65 +65,52 @@ public class CounterServlet extends HttpServlet {
             encoding = ImagesService.OutputEncoding.JPEG;
             resp.setContentType("image/jpeg");
         } else {
-            LOGGER.severe("invalid path");
+            LOGGER.warning("invalid path");
             resp.sendError(404);
             return;
         }
         long count;
-        PersistenceManager pm = PMF.get().getPersistenceManager();
+        
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         try {
-            Key key = KeyFactory.stringToKey(strings[0]);
             // カウントのインクリメントと、アクセスの記録を同時に行う
-            // transaction
-            Transaction transaction = pm.currentTransaction();
-            try {
-                // transaction開始
-                transaction.begin();
-                // カウンターの取得
-                Counter counter = pm.getObjectById(Counter.class, key);
-                count = counter.getCount() + 1;
-                // アクセス記録
-                JavaAccessRecord record = new JavaAccessRecord();
-                record.setCount(count);
-                record.setDateTime(new Date());
-                String referer = req.getHeader("Referer");
-                if (referer != null) {
-                    record.setReferer(new Link(referer));
-                } else {
-                    record.setReferer(new Link(""));
-                }
-                record.setUserAgent(req.getHeader("User-Agent"));
-                record.setRemoteAddr(req.getRemoteAddr());
-                record.setCounter(counter);
-                JavaAccessRecord result = pm.makePersistent(record);
-                // カウンターの変更
-                counter.incrementCount();
-                counter.getRecords().add(result);
-                pm.makePersistent(counter);
-                // transaction終了
-                transaction.commit();
-            } finally {
-                if (transaction.isActive()) {
-                    LOGGER.warning("transaction failed");
-                    transaction.rollback();
-                }
-            }
+            Key key = KeyFactory.stringToKey(strings[0]);
             
+            // transaction開始
+            Transaction transaction = datastoreService.beginTransaction();
+            
+            // カウンターの取得
+            Counter counter = new Counter(datastoreService.get(transaction, key));
+            count = counter.getCount() + 1;
+            // アクセス記録
+            JavaAccessRecord record = 
+                new JavaAccessRecord(new Entity(JavaAccessRecord.KIND, key));
+            record.setCount(count);
+            record.setDateTime(new Date());
+            record.setReferer(new Link(req.getHeader("Referer")));
+            record.setUserAgent(req.getHeader("User-Agent"));
+            record.setRemoteAddr(req.getRemoteAddr());
+            datastoreService.put(transaction, record.getEntity());
+            // カウンターの変更
+            counter.setCount(count);
+            datastoreService.put(transaction, counter.getEntity());
+            
+            // transaction終了
+            transaction.commit();
         } catch (IllegalArgumentException e) {
-            LOGGER.severe(e.toString());
+            LOGGER.log(Level.WARNING, "", e);
             resp.sendError(404);
             return;
-        } catch (JDOFatalUserException e) {
-            LOGGER.severe(e.toString());
-            resp.sendError(404);
-            return;
-        } catch (JDOObjectNotFoundException e) {
-            LOGGER.severe(e.toString());
+        } catch (EntityNotFoundException e) {
+            LOGGER.log(Level.WARNING, "", e);
             resp.sendError(404);
             return;
         } finally {
-            pm.close();
-        }
+            Transaction transaction = datastoreService.getCurrentTransaction(null);
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        } 
         
         // カウントを桁で区切る
         LOGGER.info(Long.toString(count));

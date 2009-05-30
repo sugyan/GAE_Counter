@@ -8,16 +8,19 @@
 <%@ page import="java.util.Collections" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.TimeZone" %>
-<%@ page import="javax.jdo.PersistenceManager" %>
+<%@ page import="com.google.appengine.api.datastore.DatastoreService" %>
+<%@ page import="com.google.appengine.api.datastore.DatastoreServiceFactory" %>
+<%@ page import="com.google.appengine.api.datastore.Entity" %>
 <%@ page import="com.google.appengine.api.datastore.Key" %>
 <%@ page import="com.google.appengine.api.datastore.KeyFactory" %>
+<%@ page import="com.google.appengine.api.datastore.PreparedQuery" %>
+<%@ page import="com.google.appengine.api.datastore.Query" %>
+<%@ page import="com.google.appengine.api.datastore.Query.SortDirection" %>
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
-<%@ page import="org.sugyan.counter.model.AccessRecordComparator" %>
 <%@ page import="org.sugyan.counter.model.Counter" %>
 <%@ page import="org.sugyan.counter.model.JavaAccessRecord" %>
-<%@ page import="org.sugyan.counter.PMF" %>
 <%!
 	int limitLength = 40;
 	UserService userService = UserServiceFactory.getUserService();
@@ -32,13 +35,15 @@
 	} else {
 	    response.sendError(403);
 	}
+	DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
 	Key key = KeyFactory.stringToKey(request.getParameter("id"));
-	PersistenceManager pm = PMF.get().getPersistenceManager();
-	Counter counter = pm.getObjectById(Counter.class, key);
+
+	Counter counter = new Counter(datastoreService.get(key));
 	User currentUser = userService.getCurrentUser();
 	if (!currentUser.equals(counter.getUser())) {
 	    response.sendError(403);
 	}
+	format.setTimeZone(zone);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -65,11 +70,11 @@
           <th>Referer</th>
         </tr>
 <%
-	format.setTimeZone(zone);
-	List<JavaAccessRecord> records = counter.getRecords();
-	Collections.sort(records, 
-	        Collections.reverseOrder(new AccessRecordComparator.DateComparator()));
-	for (JavaAccessRecord record : records) {
+	Query query = new Query(JavaAccessRecord.KIND, key)
+		.addSort(JavaAccessRecord.DATETIME, SortDirection.DESCENDING);
+	PreparedQuery recordQuery = datastoreService.prepare(query);
+	for (Entity entity : recordQuery.asIterable()) {
+	    JavaAccessRecord record = new JavaAccessRecord(entity);
 		String userAgent = record.getUserAgent();
 		String referer   = record.getReferer().toString();
 		if (userAgent.length() > limitLength) {
