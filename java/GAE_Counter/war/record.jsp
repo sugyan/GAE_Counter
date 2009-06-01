@@ -11,6 +11,7 @@
 <%@ page import="com.google.appengine.api.datastore.DatastoreService" %>
 <%@ page import="com.google.appengine.api.datastore.DatastoreServiceFactory" %>
 <%@ page import="com.google.appengine.api.datastore.Entity" %>
+<%@ page import="com.google.appengine.api.datastore.FetchOptions.Builder" %>
 <%@ page import="com.google.appengine.api.datastore.Key" %>
 <%@ page import="com.google.appengine.api.datastore.KeyFactory" %>
 <%@ page import="com.google.appengine.api.datastore.PreparedQuery" %>
@@ -76,7 +77,7 @@
 	Query query = new Query(JavaAccessRecord.KIND, key)
 		.addSort(JavaAccessRecord.DATETIME, SortDirection.DESCENDING);
 	PreparedQuery recordQuery = datastoreService.prepare(query);
-	for (Entity entity : recordQuery.asIterable()) {
+	for (Entity entity : recordQuery.asIterable(Builder.withLimit(1000))) {
 	    JavaAccessRecord record = new JavaAccessRecord(entity);
 		String userAgent = record.getUserAgent();
 		String referer   = record.getReferer().toString();
