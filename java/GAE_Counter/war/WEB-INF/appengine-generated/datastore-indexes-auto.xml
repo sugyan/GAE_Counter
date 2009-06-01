@@ -1,13 +1,10 @@
-<!-- Indices written at Mon, 1 Jun 2009 22:49:50 UTC -->
+<!-- Indices written at Mon, 1 Jun 2009 23:54:44 UTC -->
 
 <datastore-indexes>
 
-    <!-- Used 2 times in query history -->
+    <!-- Used 22 times in query history -->
     <datastore-index kind="JavaAccessRecord" ancestor="true" source="auto">
         <property name="datetime" direction="desc"/>
     </datastore-index>
-
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="JavaAccessRecord" ancestor="true" source="auto"/>
 
 </datastore-indexes>

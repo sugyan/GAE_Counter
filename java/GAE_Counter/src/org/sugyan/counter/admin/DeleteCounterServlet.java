@@ -51,8 +51,7 @@ public class DeleteCounterServlet extends HttpServlet {
             try {
                 if (records.countEntities() > 0) {
                     // 最大で100件のAccessRecordを削除
-                    Iterable<Entity> iterable = records.asIterable(Builder.withLimit(100));
-                    for (Entity record : iterable) {
+                    for (Entity record : records.asIterable(Builder.withLimit(100))) {
                         LOGGER.info("delete AccessRecord: " + record.getKey());
                         datastoreService.delete(record.getKey());
                     }

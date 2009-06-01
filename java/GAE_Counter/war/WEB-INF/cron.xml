@@ -3,5 +3,11 @@
 	<cron>
 		<url>/admin/cron/delete/counter</url>
 		<schedule>every 5 minutes</schedule>
-		<description>delete inactive counter and its access record</description>
-		<timezone>Asia/Tokyo</timezone></cron></cronentries>
+		<description>delete inactive counter and its access records</description>
+		<timezone>Asia/Tokyo</timezone></cron>
+	<cron>
+		<url>/admin/cron/delete/record</url>
+		<schedule>every 3 minutes</schedule>
+		<description>delete old access records</description>
+		<timezone>Asia/Tokyo</timezone></cron>
+	</cronentries>

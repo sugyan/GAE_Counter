@@ -19,6 +19,10 @@
 		<servlet-name>AdminDeleteCounter</servlet-name>
 		<servlet-class>org.sugyan.counter.admin.DeleteCounterServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>AdminDeleteRecord</servlet-name>
+		<servlet-class>org.sugyan.counter.admin.DeleteRecordServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>Create</servlet-name>
 		<url-pattern>/create</url-pattern>
@@ -34,6 +38,10 @@
 	<servlet-mapping>
 		<servlet-name>AdminDeleteCounter</servlet-name>
 		<url-pattern>/admin/cron/delete/counter</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AdminDeleteRecord</servlet-name>
+		<url-pattern>/admin/cron/delete/record</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
