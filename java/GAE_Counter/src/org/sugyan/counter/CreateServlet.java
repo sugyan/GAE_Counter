@@ -50,6 +50,7 @@ public class CreateServlet extends HttpServlet {
         
         // entityの生成
         Counter counter = new Counter(new Entity(Counter.KIND));
+        counter.setActive(true);
         counter.setName(name);
         counter.setUser(userService.getCurrentUser());
         counter.setDate(new Date());

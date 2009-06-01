@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -40,7 +42,8 @@ import com.google.appengine.api.images.ImagesService.OutputEncoding;
  */
 @SuppressWarnings("serial")
 public class CounterServlet extends HttpServlet {
-    private static final Logger LOGGER = Logger.getLogger(CounterServlet.class.getName());
+    private static final Logger LOGGER   = Logger.getLogger(CounterServlet.class.getName());
+    private static final Pattern PATTERN = Pattern.compile("^/counter/(\\p{Alnum}+?)\\.(PNG|JPEG)$");
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -48,34 +51,43 @@ public class CounterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        // TODO Auto-generated method stub
         // パスの解析
-        String uri = req.getRequestURI();
-        String[] strings = uri.split("/", 3)[2].split("\\.", 2);
-        if (strings.length < 2) {
+        String keyString, formatString;
+        Matcher matcher = PATTERN.matcher(req.getRequestURI());
+        if (matcher.find()) {
+            keyString    = matcher.group(1);
+            formatString = matcher.group(2);
+        } else {
             LOGGER.severe("invalid path");
             resp.sendError(404);
             return;
         }
-        OutputEncoding encoding;
-        if (strings[1].equals("png")) {
-            encoding = ImagesService.OutputEncoding.PNG;
-            resp.setContentType("image/png");
-        } else if (strings[1].equals("jpg")) {
-            encoding = ImagesService.OutputEncoding.JPEG;
-            resp.setContentType("image/jpeg");
-        } else {
-            LOGGER.warning("invalid path");
+        
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        
+        // keyによるカウンターのチェック
+        Key key;
+        try {
+            key = KeyFactory.stringToKey(keyString);
+            Counter counter = new Counter(datastoreService.get(key));
+            if (!counter.isActive()) {
+                LOGGER.warning("already deleted");
+                resp.sendError(404);
+                return;
+            }
+        } catch (IllegalArgumentException e) {
+            LOGGER.log(Level.WARNING, "", e);
+            resp.sendError(404);
+            return;
+        } catch (EntityNotFoundException e) {
+            LOGGER.log(Level.WARNING, "", e);
             resp.sendError(404);
             return;
         }
-        long count;
-        
-        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+
+        long count = 0;
+        // カウントのインクリメントと、アクセスの記録を同時に行う
         try {
-            // カウントのインクリメントと、アクセスの記録を同時に行う
-            Key key = KeyFactory.stringToKey(strings[0]);
-            
             // transaction開始
             Transaction transaction = datastoreService.beginTransaction();
             
@@ -97,18 +109,12 @@ public class CounterServlet extends HttpServlet {
             
             // transaction終了
             transaction.commit();
-        } catch (IllegalArgumentException e) {
-            LOGGER.log(Level.WARNING, "", e);
-            resp.sendError(404);
-            return;
         } catch (EntityNotFoundException e) {
-            LOGGER.log(Level.WARNING, "", e);
-            resp.sendError(404);
-            return;
         } finally {
             Transaction transaction = datastoreService.getCurrentTransaction(null);
             if (transaction != null) {
                 transaction.rollback();
+                count -= 1;
             }
         } 
         
@@ -145,11 +151,19 @@ public class CounterServlet extends HttpServlet {
         int width = xOffset;
         int height = 128;
         long color = 0x00000000L;
+        OutputEncoding encoding = OutputEncoding.valueOf(formatString);
+        switch (encoding) {
+        case PNG:
+            resp.setContentType("image/png");
+            break;
+        case JPEG:
+            resp.setContentType("image/jpeg");
+            break;
+        default :
+            break;
+        }
         ImagesService imagesService = ImagesServiceFactory.getImagesService();
         Image image = imagesService.composite(imageList, width, height, color, encoding);
-        LOGGER.info(image.getFormat().toString());
         resp.getOutputStream().write(image.getImageData());
-        return;
     }
-
 }

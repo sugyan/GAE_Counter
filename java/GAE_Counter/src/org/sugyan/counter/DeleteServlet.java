@@ -27,8 +27,8 @@ import com.google.appengine.api.users.UserServiceFactory;
  *
  */
 @SuppressWarnings("serial")
-public class DestroyServlet extends HttpServlet {
-    private static final Logger LOGGER = Logger.getLogger(DestroyServlet.class.getName());
+public class DeleteServlet extends HttpServlet {
+    private static final Logger LOGGER = Logger.getLogger(DeleteServlet.class.getName());
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -36,12 +36,11 @@ public class DestroyServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        // TODO Auto-generated method stub
         // 必ずログイン済みであること
         UserService userService = UserServiceFactory.getUserService();
         if (!userService.isUserLoggedIn()) {
             LOGGER.severe("not signed in user");
-            resp.sendRedirect("/main");
+            resp.sendRedirect("/");
             return;
         }
         
@@ -50,24 +49,13 @@ public class DestroyServlet extends HttpServlet {
         try {
             Key key = KeyFactory.stringToKey(req.getParameter("key"));
             Counter counter = new Counter(datastoreService.get(key));
-            if (counter != null) {
-                // 現在のユーザーと関連づけられているか否か
-                if (counter.getUser().equals(userService.getCurrentUser())) {
-                    /*
-                     * TODO recordの削除は別の場所で行う
-                    for (JavaAccessRecord record : counter.getRecords()) {
-                        pm.deletePersistent(record);
-                    }
-                    */
-                    datastoreService.delete(counter.getEntity().getKey());
-                } else {
-                    LOGGER.severe("invalid user");
-                    resp.sendError(403);
-                    return;
-                }
+            // 現在のユーザーと関連づけられているか否か
+            if (counter.getUser().equals(userService.getCurrentUser())) {
+                counter.setActive(false);
+                datastoreService.put(counter.getEntity());
             } else {
-                LOGGER.severe("counter not found");
-                resp.sendError(400);
+                LOGGER.severe("invalid user");
+                resp.sendError(403);
                 return;
             }
         } catch (NullPointerException e) {

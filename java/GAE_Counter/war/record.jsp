@@ -40,6 +40,9 @@
 
 	Counter counter = new Counter(datastoreService.get(key));
 	User currentUser = userService.getCurrentUser();
+	if (!counter.isActive()) {
+	    response.sendError(404);
+	}
 	if (!currentUser.equals(counter.getUser())) {
 	    response.sendError(403);
 	}

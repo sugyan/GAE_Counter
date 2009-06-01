@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.google.appengine.api.datastore.DatastoreService" %>
@@ -29,22 +30,26 @@
 <%
 	if (count > 0) {
 		out.println("<table border=\"1\">");
-		out.println("<tr>");
-		out.println("<th>key</th>");
+		out.print("<tr>");
+		out.print("<th>key</th>");
 		// プロパティ名
 		List<String> properties =
 		    new ArrayList<String>(preparedQuery.asIterator().next().getProperties().keySet());
 		for (String property : properties) {
-		    out.println("<th>" + property + "</th>");
+		    out.print("<th>");
+			%><c:out value="<%= property %>" /><%
+		    out.print("</th>");
 		}
 		out.println("</tr>");
 		for (Entity entity : preparedQuery.asIterable()) {
-		    out.println("<tr>");
-		    out.println("<td>" + entity.getKey() + "</td>");
+		    out.print("<tr>");
+		    out.print("<td>" + entity.getKey() + "</td>");
 			for (String property : properties) {
-			    out.println("<td>" + entity.getProperty(property) + "</td>");
+			    out.print("<td>");
+				%><c:out value="<%= entity.getProperty(property) %>" /><%
+			    out.print("</td>");
 			}
-		    out.println("</tr>");
+			out.println("</tr>");
 		}
 		out.println("</table>");
 	}

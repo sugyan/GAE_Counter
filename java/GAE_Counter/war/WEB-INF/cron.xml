@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+	<cron>
+		<url>/admin/cron/delete/counter</url>
+		<schedule>every 5 minutes</schedule>
+		<description>delete inactive counter and its access record</description>
+		<timezone>Asia/Tokyo</timezone></cron></cronentries>

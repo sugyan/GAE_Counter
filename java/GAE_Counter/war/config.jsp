@@ -32,6 +32,9 @@
 	Key key = KeyFactory.stringToKey(keyString);
 	
 	Counter counter = new Counter(datastoreService.get(key));
+	if (!counter.isActive()) {
+	    response.sendError(404);
+	}
 	if (!userService.getCurrentUser().equals(counter.getUser())) {
 	    response.sendError(403);
 	}
@@ -65,16 +68,16 @@
         <tr>
           <td align="right">URL：</td>
           <td>
-            <a href="/counter/<%= keyString %>.png">
-              http://java.latest.gae-counter.appspot.com/counter/<%= keyString %>.png
+            <a href="/counter/<%= keyString %>.PNG">
+              http://java.latest.gae-counter.appspot.com/counter/<%= keyString %>.PNG
             </a><br />
-            <a href="/counter/<%= keyString %>.jpg">
-              http://java.latest.gae-counter.appspot.com/counter/<%= keyString %>.jpg
+            <a href="/counter/<%= keyString %>.JPEG">
+              http://java.latest.gae-counter.appspot.com/counter/<%= keyString %>.JPEG
             </a><br />
           </td>
         </tr>
       </table>
-      <form method="POST" action="/destroy">
+      <form method="POST" action="/delete">
         <input type="hidden" name="key" value="<%= keyString %>">
         <p>
           <input type="submit" value="削除する"

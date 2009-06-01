@@ -27,7 +27,9 @@
 	User user = userService.getCurrentUser();
 
     Query query = new Query(Counter.KIND)
-    	.addFilter(Counter.USER, FilterOperator.EQUAL, user);
+    	.addFilter(Counter.USER, FilterOperator.EQUAL, user)
+    	.addFilter(Counter.ACTIVE, FilterOperator.EQUAL, Boolean.TRUE);
+    
     PreparedQuery counterQuery = datastoreService.prepare(query);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

@@ -25,10 +25,16 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>org.yoshiori.plugin.outputz.builder.OutputzBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>com.google.appengine.eclipse.core.gaeNature</nature>
 		<nature>com.google.gdt.eclipse.core.webAppNature</nature>
+		<nature>org.yoshiori.plugin.outputz.builder.OutputzNature</nature>
 	</natures>
 </projectDescription>
