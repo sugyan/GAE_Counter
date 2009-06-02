@@ -47,6 +47,9 @@ public class CreateServlet extends HttpServlet {
         if (name == null || name.equals("")) {
             name = "No name";
         }
+        if (name.length() > 100) {
+            name = name.substring(0, 100);
+        }
         
         // entityの生成
         Counter counter = new Counter(new Entity(Counter.KIND));

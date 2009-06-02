@@ -88,7 +88,7 @@
       <h2>新規作成</h2>
       <form method="POST" action="/create">
         <p>
-          カウンター名：<input name="name">
+          カウンター名：<input name="name" maxlength="100">
           <input type="submit" value="作成する">
         </p>
       </form>
