@@ -29,7 +29,7 @@
           </td>
           <td><c:out value="${counter['date']}" /></td>
           <td align="right">
-            <a href="/record.jsp?id=${counter['key']}">
+            <a href="/record/${counter['key']}">
               <c:out value="${counter['count']}" />
             </a>
           </td>

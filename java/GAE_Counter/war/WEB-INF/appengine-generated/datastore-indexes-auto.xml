@@ -1,9 +1,6 @@
-<!-- Indices written at Fri, 5 Jun 2009 14:38:17 UTC -->
+<!-- Indices written at Fri, 5 Jun 2009 15:21:52 UTC -->
 
 <datastore-indexes>
-
-    <!-- Used 8 times in query history -->
-    <datastore-index kind="JavaAccessRecord" ancestor="true" source="auto"/>
 
     <!-- Used 1 time in query history -->
     <datastore-index kind="JavaAccessRecord" ancestor="true" source="auto">

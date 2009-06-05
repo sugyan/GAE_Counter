@@ -105,21 +105,5 @@ public class ConfigServlet extends HttpServlet {
         RequestDispatcher dispatcher = context.getRequestDispatcher("/view/config.jsp");
         dispatcher.forward(req, resp);
     }
-/*
-<%
-    
-    Counter counter = new Counter(datastoreService.get(key));
-    if (!counter.isActive()) {
-        response.sendError(404);
-    }
-    if (!userService.getCurrentUser().equals(counter.getUser())) {
-        response.sendError(403);
-    }
-    dateFormat.setTimeZone(zone);   
-%>
-<% if (user != null) { %>
-      <%= user.getNickname()  %>さん
-<% } %>
 
- */
 }

@@ -21,6 +21,10 @@
 		<servlet-class>org.sugyan.counter.view.ConfigServlet</servlet-class>
 	</servlet>
 	<servlet>
+		<servlet-name>Record</servlet-name>
+		<servlet-class>org.sugyan.counter.view.RecordServlet</servlet-class>
+	</servlet>
+	<servlet>
 		<servlet-name>Create</servlet-name>
 		<servlet-class>org.sugyan.counter.CreateServlet</servlet-class>
 	</servlet>
@@ -55,6 +59,10 @@
 	<servlet-mapping>
 		<servlet-name>Config</servlet-name>
 		<url-pattern>/config/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Record</servlet-name>
+		<url-pattern>/record/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Create</servlet-name>
@@ -92,6 +100,7 @@
 			<web-resource-name>Google Accounts</web-resource-name>
 			<url-pattern>/home</url-pattern>
 			<url-pattern>/config/*</url-pattern>
+			<url-pattern>/record/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>*</role-name></auth-constraint>
