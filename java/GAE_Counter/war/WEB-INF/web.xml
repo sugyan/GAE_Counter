@@ -4,9 +4,21 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+	<filter>
+		<filter-name>JspFilter</filter-name>
+		<filter-class>org.sugyan.counter.filter.JspFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>JspFilter</filter-name>
+		<url-pattern>/view/*</url-pattern>
+	</filter-mapping>
 	<servlet>
 		<servlet-name>Home</servlet-name>
 		<servlet-class>org.sugyan.counter.view.HomeServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Config</servlet-name>
+		<servlet-class>org.sugyan.counter.view.ConfigServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>Create</servlet-name>
@@ -39,6 +51,10 @@
 	<servlet-mapping>
 		<servlet-name>Home</servlet-name>
 		<url-pattern>/home</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Config</servlet-name>
+		<url-pattern>/config/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Create</servlet-name>
@@ -75,6 +91,7 @@
 		<web-resource-collection>
 			<web-resource-name>Google Accounts</web-resource-name>
 			<url-pattern>/home</url-pattern>
+			<url-pattern>/config/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>*</role-name></auth-constraint>

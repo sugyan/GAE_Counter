@@ -10,8 +10,8 @@
   </head>
   <body>
     <div align="right">
-      <c:out value="${user.name}" />さん
-      <a href="<c:out value="${user.url}" />">Sign out</a>
+      <c:out value="${user['name']}" />さん
+      <a href="${user['url']}">Sign out</a>
     </div>
     <div id="main">
       <p>カウンターは３つまで作れます。</p><c:if test="${fn:length(counters) > 0}">
@@ -23,7 +23,7 @@
         </tr><c:forEach items="${counters}" var="counter">
         <tr>
           <td>
-            <a href="/config.jsp?id=${counter['key']}">
+            <a href="/config/${counter['key']}">
               <c:out value="${counter['name']}" />
             </a>
           </td>

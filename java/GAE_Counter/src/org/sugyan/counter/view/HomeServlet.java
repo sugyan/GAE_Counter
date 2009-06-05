@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -70,7 +71,7 @@ public class HomeServlet extends HttpServlet {
             counterData.put("key", KeyFactory.keyToString(entity.getKey()));
             counterData.put("name", counter.getName());
             counterData.put("date", FORMAT.format(counter.getDate()));
-            counterData.put("count", Long.toString(counter.getCount()));
+            counterData.put("count", Long.valueOf(counter.getCount()).toString());
             counters.add(counterData);
         }
         
@@ -81,7 +82,8 @@ public class HomeServlet extends HttpServlet {
         userBean.put("url", userService.createLogoutURL("/"));
         req.setAttribute("user", userBean);
         
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/home.jsp");
+        ServletContext context = getServletContext();
+        RequestDispatcher dispatcher = context.getRequestDispatcher("/view/home.jsp");
         dispatcher.forward(req, resp);
     }
 
