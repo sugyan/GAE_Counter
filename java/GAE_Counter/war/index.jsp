@@ -34,15 +34,16 @@
     </a>
   </div>
   <div id="main">
-    <p><a href="http://gae-counter.appspot.com">Python版はこちら</a></p>
     <div align="center">
-        <a href="/manage.jsp">
-          管理画面へ
+        <a href="/home">
+          <strong>管理画面へ</strong>
         </a>
     </div>
     <h2>説明</h2>
     <ul>
-      <li>Google App Engine(Java版)で動くアクセスカウンターです。</li>
+      <li>
+      	Google App Engine(Java版)で動くアクセスカウンターです。<br>
+        →<a href="http://gae-counter.appspot.com">Python版はこちら</a>
       <li>Googleアカウントでログインすると使えます。</li>
       <li>アクセスされるたびに数字が増加する画像データを提供します。</li>
       <li>アクセス記録を取って簡単なアクセス解析もできます。</li>

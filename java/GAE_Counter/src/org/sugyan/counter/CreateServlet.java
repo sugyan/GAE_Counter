@@ -65,7 +65,7 @@ public class CreateServlet extends HttpServlet {
             LOGGER.log(Level.SEVERE, "", e);
         }
         
-        resp.sendRedirect("/manage.jsp");
+        resp.sendRedirect("/home");
     }
     
 }

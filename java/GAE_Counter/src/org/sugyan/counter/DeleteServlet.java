@@ -79,7 +79,7 @@ public class DeleteServlet extends HttpServlet {
             return;
         }
         
-        resp.sendRedirect("/manage.jsp");
+        resp.sendRedirect("/home");
     }
 
 }

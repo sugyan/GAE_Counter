@@ -17,7 +17,7 @@ body {
 }
 
 ul {
-	margin: 0em 25px 2em 65px;
+	margin: 0em 25px 2em 40px;
 	font-size: 96%;
 	padding: 1em 1em 1em 2em;
 	list-style: square;
@@ -41,6 +41,11 @@ h2 {
 	background-color: #666666;
 }
 
+strong {
+	font-weight: bolder;
+	font-size: xx-large;
+}
+	
 a:link {
 	color: #003399;
 }

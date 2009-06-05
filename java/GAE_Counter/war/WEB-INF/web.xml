@@ -3,7 +3,12 @@
  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
  "http://java.sun.com/dtd/web-app_2_3.dtd">
 
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5"><servlet>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+	<servlet>
+		<servlet-name>Home</servlet-name>
+		<servlet-class>org.sugyan.counter.view.HomeServlet</servlet-class>
+	</servlet>
+	<servlet>
 		<servlet-name>Create</servlet-name>
 		<servlet-class>org.sugyan.counter.CreateServlet</servlet-class>
 	</servlet>
@@ -31,6 +36,10 @@
 		<servlet-name>AdminUpload</servlet-name>
 		<servlet-class>org.sugyan.counter.admin.UploadServlet</servlet-class>
 	</servlet>
+	<servlet-mapping>
+		<servlet-name>Home</servlet-name>
+		<url-pattern>/home</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Create</servlet-name>
 		<url-pattern>/create</url-pattern>
@@ -65,7 +74,7 @@
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Google Accounts</web-resource-name>
-			<url-pattern>/manage.jsp</url-pattern>
+			<url-pattern>/home</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>*</role-name></auth-constraint>
