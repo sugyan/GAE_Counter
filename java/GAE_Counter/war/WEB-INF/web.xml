@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd">
-
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
 	<filter>
 		<filter-name>JspFilter</filter-name>
@@ -12,6 +8,10 @@
 		<filter-name>JspFilter</filter-name>
 		<url-pattern>/view/*</url-pattern>
 	</filter-mapping>
+	<servlet>
+		<servlet-name>Index</servlet-name>
+		<servlet-class>org.sugyan.counter.view.IndexServlet</servlet-class>
+	</servlet>
 	<servlet>
 		<servlet-name>Home</servlet-name>
 		<servlet-class>org.sugyan.counter.view.HomeServlet</servlet-class>
@@ -52,6 +52,10 @@
 		<servlet-name>AdminUpload</servlet-name>
 		<servlet-class>org.sugyan.counter.admin.UploadServlet</servlet-class>
 	</servlet>
+	<servlet-mapping>
+		<servlet-name>Index</servlet-name>
+		<url-pattern>/main</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Home</servlet-name>
 		<url-pattern>/home</url-pattern>
