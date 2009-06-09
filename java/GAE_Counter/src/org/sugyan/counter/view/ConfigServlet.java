@@ -5,7 +5,9 @@ package org.sugyan.counter.view;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Level;
@@ -21,12 +23,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.sugyan.counter.model.Counter;
+import org.sugyan.counter.model.NumberImage;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -65,6 +71,7 @@ public class ConfigServlet extends HttpServlet {
 
         // JSPに渡すデータ
         Map<String, String> counterInfo = new HashMap<String, String>();
+        List<Map<String, String>> images = new ArrayList<Map<String,String>>();
         
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         try {
@@ -94,12 +101,23 @@ public class ConfigServlet extends HttpServlet {
             return;
         }
         
+        Query query = new Query(NumberImage.KIND);
+        PreparedQuery preparedQuery = datastoreService.prepare(query);
+        for (Entity entity : preparedQuery.asIterable()) {
+            HashMap<String, String> imageInfo = new HashMap<String, String>();
+            NumberImage numberImage = new NumberImage(entity);
+            imageInfo.put("name", numberImage.getName());
+            imageInfo.put("key", KeyFactory.keyToString(entity.getKey()));
+            images.add(imageInfo);
+        }
+        
         // requestにデータを載せる
         Map<String, String> userBean = new HashMap<String, String>();
         userBean.put("name", user.getNickname());
         userBean.put("url", userService.createLogoutURL("/"));
         req.setAttribute("user", userBean);
         req.setAttribute("counter", counterInfo);
+        req.setAttribute("images", images);
         
         ServletContext context = getServletContext();
         RequestDispatcher dispatcher = context.getRequestDispatcher("/view/config.jsp");

@@ -3,6 +3,7 @@
  */
 package org.sugyan.counter.model;
 
+import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Entity;
 
 /**
@@ -13,7 +14,7 @@ public class NumberImage {
     
     public static final String KIND = NumberImage.class.getSimpleName();
     
-    private static final String NAME = "name";
+    private static final String NAME  = "name";
 
     private Entity entity;
 
@@ -32,10 +33,26 @@ public class NumberImage {
     }
     
     /**
+     * @param num
+     * @return
+     */
+    public Blob getImage(String num) {
+        return (Blob)entity.getProperty(num);
+    }
+    
+    /**
      * @return
      */
     public String getName() {
         return (String)entity.getProperty(NAME);
+    }
+
+    /**
+     * @param num
+     * @param blob
+     */
+    public void setImage(String num, Blob blob) {
+        entity.setProperty(num, blob);
     }
     
     /**

@@ -6,6 +6,7 @@ package org.sugyan.counter.model;
 import java.util.Date;
 
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.users.User;
 
 /**
@@ -21,6 +22,7 @@ public class Counter {
     private static final String NAME  = "name";
     private static final String DATE  = "date";
     private static final String COUNT = "count";
+    private static final String IMAGE = "image";
     
     private Entity entity;
 
@@ -55,24 +57,31 @@ public class Counter {
     /**
      * @return
      */
+    public Key getImage() {
+        return (Key)entity.getProperty(IMAGE);
+    }
+
+    /**
+     * @return
+     */
     public String getName() {
         return (String)entity.getProperty(NAME);
     }
-
+    
     /**
      * @return
      */
     public User getUser() {
         return (User)entity.getProperty(USER);
     }
-    
+
     /**
      * @return
      */
     public boolean isActive() {
         return (Boolean)entity.getProperty(ACTIVE);
     }
-
+    
     /**
      * @param isActive
      */
@@ -95,6 +104,13 @@ public class Counter {
     }
     
     /**
+     * @param key
+     */
+    public void setImage(Key key) {
+        entity.setProperty(IMAGE, key);
+    }
+    
+    /**
      * @param name
      */
     public void setName(String name) {
@@ -108,3 +124,4 @@ public class Counter {
         entity.setProperty(USER, user);
     }
 }
+

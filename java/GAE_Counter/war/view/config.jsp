@@ -34,8 +34,22 @@
             </a><br>
           </td>
         </tr>
+        <tr>
+          <td align="right">デザイン：</td>
+          <td>
+            <form method="post" action="/update">
+              <input type="hidden" name="key" value="${counter['key']}">
+              <select name="image"><c:forEach items="${images}" var="image">
+                <option value="${image['key']}">
+                  <c:out value="${image['name']}" />
+                </option></c:forEach>
+              </select>
+              <input type="submit" value="変更する">
+            </form>
+          </td>
+        </tr>
       </table>
-      <form method="POST" action="/delete">
+      <form method="post" action="/delete">
         <input type="hidden" name="key" value="${counter['key']}">
         <p>
           <input type="submit" value="削除する"

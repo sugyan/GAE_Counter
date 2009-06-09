@@ -29,6 +29,10 @@
 		<servlet-class>org.sugyan.counter.CreateServlet</servlet-class>
 	</servlet>
 	<servlet>
+		<servlet-name>Update</servlet-name>
+		<servlet-class>org.sugyan.counter.UpdateServlet</servlet-class>
+	</servlet>
+	<servlet>
 		<servlet-name>Delete</servlet-name>
 		<servlet-class>org.sugyan.counter.DeleteServlet</servlet-class>
 	</servlet>
@@ -45,12 +49,12 @@
 		<servlet-class>org.sugyan.counter.admin.DeleteRecordServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>AdminCreate</servlet-name>
-		<servlet-class>org.sugyan.counter.admin.CreateServlet</servlet-class>
+		<servlet-name>AdminUploader</servlet-name>
+		<servlet-class>org.sugyan.counter.admin.UploaderServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>AdminUpload</servlet-name>
-		<servlet-class>org.sugyan.counter.admin.UploadServlet</servlet-class>
+		<servlet-name>AdminView</servlet-name>
+		<servlet-class>org.sugyan.counter.admin.ViewServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Index</servlet-name>
@@ -73,6 +77,10 @@
 		<url-pattern>/create</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
+		<servlet-name>Update</servlet-name>
+		<url-pattern>/update</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>Delete</servlet-name>
 		<url-pattern>/delete</url-pattern>
 	</servlet-mapping>
@@ -89,12 +97,12 @@
 		<url-pattern>/admin/cron/delete/record</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>AdminCreate</servlet-name>
-		<url-pattern>/admin/create</url-pattern>
+		<servlet-name>AdminUploader</servlet-name>
+		<url-pattern>/admin/uploader</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>AdminUpload</servlet-name>
-		<url-pattern>/admin/upload</url-pattern>
+		<servlet-name>AdminView</servlet-name>
+		<url-pattern>/admin/view/*</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

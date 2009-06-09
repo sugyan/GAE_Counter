@@ -76,11 +76,11 @@ public class HomeServlet extends HttpServlet {
         }
         
         // requestにデータを載せる
-        req.setAttribute("counters", counters);
         Map<String, String> userBean = new HashMap<String, String>();
         userBean.put("name", user.getNickname());
         userBean.put("url", userService.createLogoutURL("/"));
         req.setAttribute("user", userBean);
+        req.setAttribute("counters", counters);
         
         ServletContext context = getServletContext();
         RequestDispatcher dispatcher = context.getRequestDispatcher("/view/home.jsp");
