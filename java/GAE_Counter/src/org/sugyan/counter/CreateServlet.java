@@ -57,6 +57,7 @@ public class CreateServlet extends HttpServlet {
         counter.setName(name);
         counter.setUser(userService.getCurrentUser());
         counter.setDate(new Date());
+        counter.setSize(100L);
         counter.setCount(0);
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         try {

@@ -51,8 +51,18 @@ public class UpdateServlet extends HttpServlet {
             Counter counter = new Counter(datastoreService.get(key));
             // 現在のユーザーと関連づけられているか否か
             if (counter.getUser().equals(userService.getCurrentUser())) {
-                Key imageKey = KeyFactory.stringToKey(req.getParameter("image"));
-                counter.setImage(imageKey);
+                // image
+                String imageString = req.getParameter("image");
+                if (imageString != null) {
+                    Key imageKey = KeyFactory.stringToKey(imageString);
+                    counter.setImage(imageKey);
+                }
+                // size
+                String sizeString = req.getParameter("size");
+                if (sizeString != null) {
+                    counter.setSize(Long.parseLong(sizeString));
+                }
+                
                 datastoreService.put(counter.getEntity());
             } else {
                 LOGGER.severe("invalid user");

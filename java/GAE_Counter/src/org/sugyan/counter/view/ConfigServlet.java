@@ -89,7 +89,13 @@ public class ConfigServlet extends HttpServlet {
             }
             counterInfo.put("name", counter.getName());
             counterInfo.put("date", FORMAT.format(counter.getDate()));
+            counterInfo.put("size", counter.getSize().toString());
             counterInfo.put("count", Long.valueOf(counter.getCount()).toString());
+            Key imageKey = counter.getImage();
+            if (imageKey != null) {
+                Entity entity = datastoreService.get(imageKey);
+                counterInfo.put("image", new NumberImage(entity).getName());
+            }
             counterInfo.put("key", keyString);
         } catch (IllegalArgumentException e) {
             LOGGER.log(Level.WARNING, "", e);

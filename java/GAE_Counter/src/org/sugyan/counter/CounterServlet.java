@@ -33,6 +33,7 @@ import com.google.appengine.api.images.Composite;
 import com.google.appengine.api.images.Image;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.Transform;
 import com.google.appengine.api.images.ImagesService.OutputEncoding;
 
 /**
@@ -84,7 +85,7 @@ public class CounterServlet extends HttpServlet {
             break;
         }
         // 画像データの生成
-        Image image = getImage(counter.getImage(), count, encoding);
+        Image image = getImage(counter.getImage(), counter.getSize()/100.0, count, encoding);
         if (image != null) {
             resp.getOutputStream().write(image.getImageData());
         }
@@ -161,7 +162,7 @@ public class CounterServlet extends HttpServlet {
         return count;
     }
     
-    private Image getImage(Key key, long count, OutputEncoding encoding) throws IOException {
+    private Image getImage(Key key, double rate, long count, OutputEncoding encoding) throws IOException {
         NumberImage numberImage = null;
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         try {
@@ -188,6 +189,10 @@ public class CounterServlet extends HttpServlet {
             if (images[digit] == null) {
                 Blob blob = numberImage.getImage(digit.toString());
                 Image image = ImagesServiceFactory.makeImage(blob.getBytes());
+                int resizeWidth  = (int)(image.getWidth() * rate);
+                int resizeHeight = (int)(image.getHeight() * rate);
+                Transform resize = ImagesServiceFactory.makeResize(resizeWidth, resizeHeight);
+                image = ImagesServiceFactory.getImagesService().applyTransform(resize, image);
                 int height = image.getHeight();
                 if (height > maxHeight) {
                     maxHeight = height;

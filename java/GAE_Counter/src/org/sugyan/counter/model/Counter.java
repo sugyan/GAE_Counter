@@ -21,6 +21,7 @@ public class Counter {
     
     private static final String NAME  = "name";
     private static final String DATE  = "date";
+    private static final String SIZE  = "size";
     private static final String COUNT = "count";
     private static final String IMAGE = "image";
     
@@ -69,12 +70,19 @@ public class Counter {
     }
     
     /**
+     * @return size
+     */
+    public Long getSize() {
+        return (Long)entity.getProperty(SIZE);
+    }
+
+    /**
      * @return
      */
     public User getUser() {
         return (User)entity.getProperty(USER);
     }
-
+    
     /**
      * @return
      */
@@ -115,6 +123,13 @@ public class Counter {
      */
     public void setName(String name) {
         entity.setProperty(NAME, name);
+    }
+
+    /**
+     * @param size
+     */
+    public void setSize(Long size) {
+        entity.setProperty(SIZE, size);
     }
     
     /**
