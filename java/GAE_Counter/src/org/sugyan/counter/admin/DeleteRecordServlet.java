@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sugyan.counter.model.JavaAccessRecord;
+import org.sugyan.counter.model.AccessRecord;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -40,8 +40,8 @@ public class DeleteRecordServlet extends HttpServlet {
         // 30日以上前のものは削除する
         Date threshold = new Date(System.currentTimeMillis() - 30 * 24 * 60 * 60 * 1000);
         // threshold以前のAccessRecordを探す
-        Query query = new Query(JavaAccessRecord.KIND)
-            .addFilter(JavaAccessRecord.DATETIME, FilterOperator.LESS_THAN, threshold);
+        Query query = new Query(AccessRecord.KIND)
+            .addFilter(AccessRecord.DATETIME, FilterOperator.LESS_THAN, threshold);
         PreparedQuery records = datastoreService.prepare(query);
         // 最大100件を削除
         for (Entity record : records.asIterable(Builder.withLimit(100))) {

@@ -12,9 +12,9 @@ import com.google.appengine.api.datastore.Link;
  * @author sugyan
  * Python版と区別するためにkindでJava版であることを明示する
  */
-public class JavaAccessRecord {
+public class AccessRecord {
     
-    public static final String KIND = JavaAccessRecord.class.getSimpleName();
+    public static final String KIND = AccessRecord.class.getSimpleName();
     public static final String DATETIME   = "datetime";
     
     private static final String COUNT      = "count";
@@ -27,7 +27,7 @@ public class JavaAccessRecord {
     /**
      * @param entity
      */
-    public JavaAccessRecord(Entity entity) {
+    public AccessRecord(Entity entity) {
         this.entity = entity;
     }
 

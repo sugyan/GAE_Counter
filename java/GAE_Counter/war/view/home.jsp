@@ -9,6 +9,7 @@
     <link href="/css/style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
+    <h1><a href="/">GAE Counter</a></h1>
     <div align="right">
       <c:out value="${user['name']}" />さん
       <a href="${user['url']}">Sign out</a>

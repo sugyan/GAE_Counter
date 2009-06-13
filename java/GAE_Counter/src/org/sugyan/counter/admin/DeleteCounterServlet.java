@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.sugyan.counter.model.Counter;
-import org.sugyan.counter.model.JavaAccessRecord;
+import org.sugyan.counter.model.AccessRecord;
 
 import com.google.appengine.api.datastore.DatastoreFailureException;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -46,7 +46,7 @@ public class DeleteCounterServlet extends HttpServlet {
         if (counters.countEntities() > 0) {
             // １つ目に現れたカウンターをparentとして持つAccessRecordを探す
             Entity entity = counters.asIterator().next();
-            Query recordQuery = new Query(JavaAccessRecord.KIND, entity.getKey());
+            Query recordQuery = new Query(AccessRecord.KIND, entity.getKey());
             PreparedQuery records = datastoreService.prepare(recordQuery);
             try {
                 if (records.countEntities() > 0) {

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sugyan.counter.model.JavaAccessRecord;
+import org.sugyan.counter.model.AccessRecord;
 import org.sugyan.counter.model.Counter;
 import org.sugyan.counter.model.NumberImage;
 
@@ -136,8 +136,8 @@ public class CounterServlet extends HttpServlet {
             Counter counter = new Counter(datastoreService.get(transaction, key));
             count = counter.getCount() + 1;
             // アクセス記録
-            JavaAccessRecord record = 
-                new JavaAccessRecord(new Entity(JavaAccessRecord.KIND, key));
+            AccessRecord record = 
+                new AccessRecord(new Entity(AccessRecord.KIND, key));
             record.setCount(count);
             record.setDateTime(new Date());
             record.setReferer(new Link(req.getHeader("Referer")));

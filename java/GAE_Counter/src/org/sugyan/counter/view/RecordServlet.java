@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.sugyan.counter.model.Counter;
-import org.sugyan.counter.model.JavaAccessRecord;
+import org.sugyan.counter.model.AccessRecord;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -92,12 +92,12 @@ public class RecordServlet extends HttpServlet {
             }
             counterData.put("name", counter.getName());
             
-            Query query = new Query(JavaAccessRecord.KIND, key)
-                .addSort(JavaAccessRecord.DATETIME, SortDirection.DESCENDING);
+            Query query = new Query(AccessRecord.KIND, key)
+                .addSort(AccessRecord.DATETIME, SortDirection.DESCENDING);
             PreparedQuery recordQuery = datastoreService.prepare(query);
             for (Entity entity : recordQuery.asIterable(Builder.withLimit(1000))) {
                 Map<String, String> recordData = new HashMap<String, String>();
-                JavaAccessRecord record = new JavaAccessRecord(entity);
+                AccessRecord record = new AccessRecord(entity);
                 recordData.put("count", Long.valueOf(record.getCount()).toString());
                 recordData.put("date", FORMAT.format(record.getDateTime()));
                 recordData.put("remote", record.getRemoteAddr());
@@ -138,38 +138,3 @@ public class RecordServlet extends HttpServlet {
     }
 
 }
-/*
-<%!
-int limitLength = 40;
-%>
-<%
-DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-Key key = KeyFactory.stringToKey(request.getParameter("id"));
-
-Counter counter = new Counter(datastoreService.get(key));
-User currentUser = userService.getCurrentUser();
-%>
-<% if (user != null) { %>
-      <%= user.getNickname()  %>さん
-<% } %>
-      <a href="<%= logoutUrl %>">Sign out</a>
-<%
-    Query query = new Query(JavaAccessRecord.KIND, key)
-        .addSort(JavaAccessRecord.DATETIME, SortDirection.DESCENDING);
-    PreparedQuery recordQuery = datastoreService.prepare(query);
-    for (Entity entity : recordQuery.asIterable(Builder.withLimit(1000))) {
-        JavaAccessRecord record = new JavaAccessRecord(entity);
-        String userAgent = record.getUserAgent();
-        String referer   = record.getReferer().toString();
-        if (userAgent.length() > limitLength) {
-            userAgent = userAgent.substring(0, limitLength) + "...";
-        }
-        if (referer.length() > limitLength) {
-            referer = referer.substring(0, limitLength) + "...";
-        }
-%>
-<%
-    }
-%>
-
-*/

@@ -8,6 +8,7 @@
     <title>GAE Counter</title> 
   </head>
   <body>
+    <h1><a href="/">GAE Counter</a></h1>
     <div align="right">
       <c:out value="${user['name']}" />さん
       <a href="${user['url']}">Sign out</a>
@@ -29,13 +30,15 @@
             <a href="/counter/${counter['key']}.PNG">
               http://java.latest.gae-counter.appspot.com/counter/<c:out value="${counter['key']}" />.PNG
             </a><br>
+            <input name="text" onFocus="this.select();" type="text" value="&lt;img src=&quot;http://java.latest.gae-counter.appspot.com/counter/<c:out value="${counter['key']}" />.PNG&quot;&gt;" style="width: 520px;"><br>
             <a href="/counter/${counter['key']}.JPEG">
               http://java.latest.gae-counter.appspot.com/counter/<c:out value="${counter['key']}" />.JPEG
             </a><br>
+            <input name="text" onFocus="this.select();" type="text" value="&lt;img src=&quot;http://java.latest.gae-counter.appspot.com/counter/<c:out value="${counter['key']}" />.JPEG&quot;&gt;" style="width: 520px;"><br>
           </td>
         </tr>
         <tr>
-          <td align="right">フォント：</td>
+          <td align="right">デザイン：</td>
           <td>
             <c:out value="${counter['image']}" /><br>
             <form method="post" action="/update">

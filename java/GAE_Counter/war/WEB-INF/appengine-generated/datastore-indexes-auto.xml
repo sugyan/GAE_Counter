@@ -1,4 +1,10 @@
-<!-- Indices written at Thu, 11 Jun 2009 23:55:37 UTC -->
+<!-- Indices written at Sat, 13 Jun 2009 15:59:49 UTC -->
 
-<datastore-indexes/>
+<datastore-indexes>
 
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="AccessRecord" ancestor="true" source="auto">
+        <property name="datetime" direction="desc"/>
+    </datastore-index>
+
+</datastore-indexes>
