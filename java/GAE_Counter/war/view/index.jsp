@@ -18,7 +18,7 @@
     <div id="main">
       <div align="center">
         <a href="/home">
-          <strong>管理画面へ</strong>
+          <strong>HOME</strong>
         </a>
       </div>
       <h2>説明</h2>
