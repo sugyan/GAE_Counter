@@ -32,7 +32,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 public class ViewServlet extends HttpServlet {
     
     private static final Logger LOGGER = Logger.getLogger(ViewServlet.class.getName());
-    private static final Pattern PATTERN = Pattern.compile("^/admin/view/(\\p{Alnum}+)/(\\p{Digit})$");
+    private static final Pattern PATTERN = Pattern.compile("^/admin/view/([\\p{Alnum}-_]+)/(\\p{Digit})$");
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -54,6 +54,7 @@ public class ViewServlet extends HttpServlet {
             NumberImage numberImage = new NumberImage(entity);
             Blob image = numberImage.getImage(numString);
             if (image != null) {
+                resp.setContentType("image/png");
                 ServletOutputStream outputStream = resp.getOutputStream();
                 outputStream.write(image.getBytes());
             }

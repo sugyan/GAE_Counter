@@ -48,7 +48,7 @@ public class RecordServlet extends HttpServlet {
 
     private static final int LIMIT_LENGTH = 40;
     private static final Logger LOGGER = Logger.getLogger(RecordServlet.class.getName());
-    private static final Pattern PATTERN = Pattern.compile("^/record/(\\p{Alnum}+)$");
+    private static final Pattern PATTERN = Pattern.compile("^/record/([\\p{Alnum}-_]+)$");
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
     static {

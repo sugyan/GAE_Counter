@@ -45,7 +45,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 public class ConfigServlet extends HttpServlet {
 
     private static final Logger LOGGER = Logger.getLogger(ConfigServlet.class.getName());
-    private static final Pattern PATTERN = Pattern.compile("^/config/(\\p{Alnum}+)$");
+    private static final Pattern PATTERN = Pattern.compile("^/config/([\\p{Alnum}-_]+)$");
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
     static {

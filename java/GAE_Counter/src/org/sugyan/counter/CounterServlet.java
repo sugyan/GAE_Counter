@@ -43,7 +43,7 @@ import com.google.appengine.api.images.ImagesService.OutputEncoding;
 @SuppressWarnings("serial")
 public class CounterServlet extends HttpServlet {
     private static final Logger LOGGER   = Logger.getLogger(CounterServlet.class.getName());
-    private static final Pattern PATTERN = Pattern.compile("^/counter/(\\p{Alnum}+?)\\.(PNG|JPEG)$");
+    private static final Pattern PATTERN = Pattern.compile("^/counter/([\\p{Alnum}-_]+?)\\.(PNG|JPEG)$");
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
