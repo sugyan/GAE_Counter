@@ -17,6 +17,7 @@
     </div>
     <div id="main">
       <div align="center">
+        <img src="http://java.latest.gae-counter.appspot.com/counter/agtnYWUtY291bnRlcnIOCxIHQ291bnRlchiLVgw.PNG"><br>
         <a href="/home">
           <strong>HOME</strong>
         </a>

@@ -207,7 +207,7 @@ public class CounterServlet extends HttpServlet {
 
         // imageListのCompositeデータを用いて画像を合成、出力
         int width = xOffset;
-        long color = 0x00000000L;
+        long color = 0xFFFFFFFFL;
         ImagesService imagesService = ImagesServiceFactory.getImagesService();
         return imagesService.composite(imageList, width, maxHeight, color, encoding);
     }
